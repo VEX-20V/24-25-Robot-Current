@@ -17,10 +17,10 @@ pros::Imu imu(10);
 pros::Rotation horizontalEnc(14);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(16);
-// horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -0.63610);
-// vertical tracking wheel. 2.75" diameter, 2.5" offset, left of the robot (negative)
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, -.3285);
+// horizontal tracking wheel. 
+lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -0.63610);
+// vertical tracking wheel. 
+lemlib::TrackingWheel vertical(&verticalEnc, 2, -.3285);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
