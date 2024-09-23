@@ -6,10 +6,10 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 //Intake 
-pros::Motor intake(4, true); // reverse the direction 
+pros::Motor intake(-4); // reverse the direction 
 
 //Piston mogo mech 
-pros::ADIDigitalOut mogoMech('A', true);
+pros::adi::Pneumatics mogoMech('A', true);
 
 // motor groups
 pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
@@ -93,6 +93,7 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
+    
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -170,6 +171,7 @@ void autonomous() {
  */
 void opcontrol() {
     // controller
+    pros::Controller master (pros::E_CONTROLLER_MASTER);
     // loop to continuously update motors
     while (true) {
 
@@ -183,7 +185,7 @@ void opcontrol() {
 
         //intake controlling
         int speed = 127;
-        if( master.get_digital(pros:: E_CONTROLLER_DIGITAL_R1)) {
+        if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_R1)) {
         intake.move(speed);
         } else if (master.get_digital(pros :: E_CONTROLLER_DIGITAL_R2)) {
         intake.move(-speed);
