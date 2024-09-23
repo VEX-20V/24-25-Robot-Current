@@ -5,6 +5,12 @@
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
+//Intake 
+pros::Motor intake(4, true); // reverse the direction 
+
+//Piston mogo mech 
+pros::ADIDigitalOut mogoMech('A', true);
+
 // motor groups
 pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
 pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
@@ -166,11 +172,30 @@ void opcontrol() {
     // controller
     // loop to continuously update motors
     while (true) {
+
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
+
+
+        //intake controlling
+        int speed = 127;
+        if( master.get_digital(pros:: E_CONTROLLER_DIGITAL_R1)) {
+        intake.move(speed);
+        } else if (master.get_digital(pros :: E_CONTROLLER_DIGITAL_R2)) {
+        intake.move(-speed);
+        } else {
+        intake.move(0);
+        }
+
+        //Mogo Mech Controlling
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+            mogoMech.set_value(false);
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+
         // delay to save resources
         pros::delay(10);
     }
