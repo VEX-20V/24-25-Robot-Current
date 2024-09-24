@@ -141,11 +141,13 @@ void competition_initialize() {}
 
 // path file name is "LukeTest.txt".
 // "." is replaced with "_" to overcome c++ limitations
-//ASSET(LukeTest2_txt);
+ASSET(TestOn24th_txt);
 
 void autonomous() {
     // set chassis pose
     chassis.setPose(0, 0, 0);
+
+    chassis.follow(TestOn24th_txt, 15, 2000);
 
     while (true)
     {
