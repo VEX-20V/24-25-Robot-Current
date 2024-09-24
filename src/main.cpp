@@ -146,6 +146,12 @@ void competition_initialize() {}
 void autonomous() {
     // set chassis pose
     chassis.setPose(0, 0, 0);
+
+    while (true)
+    {
+        intake.move(127);
+    }
+
     // lookahead distance: 15 inches
     // timeout: 2000 ms
    // chassis.follow(LukeTest2_txt, 15, 2000);
