@@ -12,8 +12,10 @@ pros::Motor intake(-4); // reverse the direction
 pros::adi::Pneumatics mogoMech('A', true);
 
 // motor groups
-pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
+// left motor group
+pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); 
+// right motor group - all reversed.
+pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue);  
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -128,10 +130,6 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-// get a path used for pure pursuit
-// this needs to be put outside a function
-//ASSET(example_txt); // '.' replaced with "_" to make c++ happy
-
 /**
  * Runs during auto
  *
@@ -141,27 +139,22 @@ void competition_initialize() {}
 
 // path file name is "LukeTest.txt".
 // "." is replaced with "_" to overcome c++ limitations
-ASSET(TestOn24th_txt);
+//ASSET(TestOn24th_txt);
 
 void autonomous() {
-    // set chassis pose
-    chassis.setPose(0, 0, 0);
+    //chassis.setPose(0, 0, 0);
+    //chassis.moveToPoint(0, 36, 2000);
 
-    chassis.follow(TestOn24th_txt, 15, 2000);
+    // chassis.follow(LukeTest2_txt, 15, 2000);
 
     while (true)
     {
         intake.move(127);
     }
-
-    // lookahead distance: 15 inches
-    // timeout: 2000 ms
-   // chassis.follow(LukeTest2_txt, 15, 2000);
 }
 
-/**
- * Runs in driver control
- */
+
+//Runs in driver control
 void opcontrol() {
     // controller
     pros::Controller master (pros::E_CONTROLLER_MASTER);
@@ -174,7 +167,6 @@ void opcontrol() {
 
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
-
 
         //intake controlling
         int speed = 127;
@@ -189,7 +181,9 @@ void opcontrol() {
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
             mogoMech.set_value(false);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            mogoMech.set_value(true);
+        }
 
         // delay to save resources
         pros::delay(10);
