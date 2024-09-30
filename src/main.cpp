@@ -1,6 +1,7 @@
-#include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
+#include "main.h"
 #include "lemlib/chassis/trackingWheel.hpp"
+#include "setUp.cpp"
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -10,10 +11,6 @@ pros::Motor intake(-4); // reverse the direction
 
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
-
-// motor groups
-pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -187,3 +184,5 @@ void opcontrol() {
         pros::delay(10);
     }
 }
+
+//organization goals are on "Code Day 4: Creating CodeV2" of notebook. 
