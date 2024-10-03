@@ -53,16 +53,17 @@ lemlib::ControllerSettings linearController(10, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(2, // proportional gain (kP)
-                                             0, // integral gain (kI)
-                                             10, // derivative gain (kD)
-                                             3, // anti windup
-                                             1, // small error range, in degrees
-                                             100, // small error range timeout, in milliseconds
-                                             3, // large error range, in degrees
-                                             500, // large error range timeout, in milliseconds
-                                             0 // maximum acceleration (slew)
+lemlib::ControllerSettings angular_controller(2, // proportional gain (kP)
+                                              0, // integral gain (kI)
+                                              10, // derivative gain (kD)
+                                              0, // anti windup
+                                              0, // small error range, in inches
+                                              0, // small error range timeout, in milliseconds
+                                              0, // large error range, in inches
+                                              0, // large error range timeout, in milliseconds
+                                              0 // maximum acceleration (slew)
 );
+
 
 // sensors for odometry
 lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
@@ -155,14 +156,8 @@ ASSET(BasicPathPt2_txt);
 
 void autonomous() {
     chassis.setPose(0, 0, 0);
-    chassis.moveToPoint(0, 0, 5000);
-    chassis.moveToPoint(14.207, -22.215, 5000);
 
-    /*
-    chassis.moveToPoint(0, 0, 5000);
-    chassis.moveToPoint(5.662, 25.754, 5000);
-    */
-    
+
     /*
     // set chassis pose
     autonIntake(1);
