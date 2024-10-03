@@ -152,8 +152,8 @@ void autonIntake(int seconds)
 
 // path file name is "LukeTest.txt".
 // "." is replaced with "_" to overcome c++ limitations
-ASSET(BasicPathPt1);
-ASSET(BasicPathPt2);
+ASSET(BasicPathPt1_txt);
+ASSET(BasicPathPt2_txt);
 
 
 void autonomous() {
