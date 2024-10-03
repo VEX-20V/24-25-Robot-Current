@@ -1,10 +1,7 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
 #include "lemlib/chassis/trackingWheel.hpp"
-//#include "setUp.cpp"
-
-pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
+#include "setUp.cpp"
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -15,8 +12,13 @@ pros::Motor intake(-4); // reverse the direction
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
 
+pros::adi::Pneumatics hang('B', true);
+
 // Inertial Sensor on port 10
 pros::Imu imu(10);
+
+pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
+pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
@@ -146,24 +148,9 @@ ASSET(LukeTest2_txt);
 void autonomous() {
     // set chassis pose
     chassis.setPose(0, 0, 0);
-    chassis.setPose(0, 5, 0);
-    /*
-    chassis.moveTo(0, 0, 5000);
-    chassis.moveTo(40.555, 0.517, 5000);
-    chassis.moveTo(16.274, -22.732, 5000);
-    chassis.moveTo(51.146, 10.849, 5000);
-    */
-
-    // create a timer that will wait for 1 second
-    // check if the timer is done
-        
-
-    //chassis.setPose(0, 0, 0);//does this bring it back or make it not move?
-    //basically, is it incremental or absolute coordinates? Hopefully absolute plz. 
-
     // lookahead distance: 15 inches
     // timeout: 2000 ms
-   // chassis.follow(LukeTest2_txt, 15, 2000);
+    chassis.follow(LukeTest2_txt, 15, 2000);
 }
 
 /**
@@ -196,7 +183,15 @@ void opcontrol() {
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
             mogoMech.set_value(false);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            mogoMech.set_value(true);
+        }
+
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+            hang.set_value(false);
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            hang.set_value(true);
+        }
 
         // delay to save resources
         pros::delay(10);
