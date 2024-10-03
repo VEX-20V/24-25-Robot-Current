@@ -21,9 +21,6 @@ pros::adi::Pneumatics hang('B', false);
 // Inertial Sensor on port 10
 pros::Imu imu(10);
 
-pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
-
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
 pros::Rotation horizontalEnc(17);
