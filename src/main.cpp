@@ -132,7 +132,7 @@ void competition_initialize() {}
 
 // get a path used for pure pursuit
 // this needs to be put outside a function
-//ASSET(example_txt); // '.' replaced with "_" to make c++ happy
+ASSET(example_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -143,14 +143,14 @@ void competition_initialize() {}
 
 // path file name is "LukeTest.txt".
 // "." is replaced with "_" to overcome c++ limitations
-//ASSET(LukeTest2_txt);
+ASSET(LukeTest2_txt);
 
 void autonomous() {
     // set chassis pose
     chassis.setPose(0, 0, 0);
     // lookahead distance: 15 inches
     // timeout: 2000 ms
-   // chassis.follow(LukeTest2_txt, 15, 2000);
+    chassis.follow(LukeTest2_txt, 15, 2000);
 }
 
 /**
