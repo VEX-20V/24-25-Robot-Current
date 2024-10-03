@@ -14,6 +14,8 @@ pros::Motor intake(-4); // reverse the direction
 
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
+pros::adi::Pneumatics hang('B', true);
+
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -147,12 +149,17 @@ void autonomous() {
     // set chassis pose
     chassis.setPose(0, 0, 0);
     chassis.setPose(0, 5, 0);
-    /*
-    chassis.moveTo(0, 0, 5000);
-    chassis.moveTo(40.555, 0.517, 5000);
-    chassis.moveTo(16.274, -22.732, 5000);
-    chassis.moveTo(51.146, 10.849, 5000);
-    */
+    chassis.setPose(0, 0, 0);//moves back??
+    //OR does THIS move it back?
+    chassis.setPose(0, -5, 0);
+
+
+
+
+    
+    chassis.moveToPose(0, 0, 90, 5000);
+    chassis.moveToPoint(40.555, 0.517, 5000);
+    
 
     // create a timer that will wait for 1 second
     // check if the timer is done
@@ -196,7 +203,15 @@ void opcontrol() {
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
             mogoMech.set_value(false);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            mogoMech.set_value(true);
+        }
+
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+            hang.set_value(false);
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            hang.set_value(true);
+        }
 
         // delay to save resources
         pros::delay(10);
