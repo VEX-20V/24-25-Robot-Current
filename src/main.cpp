@@ -157,25 +157,28 @@ ASSET(BasicPathPt2);
 
 
 void autonomous() {
+
+    /*
     // set chassis pose
     chassis.setPose(0, 0, 0);
     autonIntake(1);
     chassis.moveToPose(0, 5, 0, 5000);
     chassis.moveToPose(0, 0, 0, 5000);//moves back??
     //OR does THIS move it back?
-    //chassis.setPose(0, -5, 0);
+    chassis.moveToPose(0, -5, 0, 5000);
 
-    /*
+    
     mogoMech.set_value(false);//clamps mogo
     pros::delay(1000);
     mogoMech.set_value(false);//releases mogo
     */
 
 
-    /*
-    chassis.follow(BasicPathPt1, 15, 2000);
-    chassis.follow(BasicPathPt2, 15, 2000);
-    */
+    
+    chassis.follow(BasicPathPt1, 15, 2000, true);
+    pros::delay(1000);
+    chassis.follow(BasicPathPt2, 15, 2000, false);
+    
 
 
 
