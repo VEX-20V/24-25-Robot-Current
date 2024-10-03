@@ -12,6 +12,8 @@ pros::Motor intake(-4); // reverse the direction
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
 
+pros::adi::Pneumatics hang('B', true);
+
 // Inertial Sensor on port 10
 pros::Imu imu(10);
 
@@ -178,7 +180,15 @@ void opcontrol() {
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
             mogoMech.set_value(false);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            mogoMech.set_value(true);
+        }
+
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+            hang.set_value(false);
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            hang.set_value(true);
+        }
 
         // delay to save resources
         pros::delay(10);
