@@ -10,7 +10,7 @@ pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right moto
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 //Intake 
-pros::Motor intake(-4); // reverse the direction 
+pros::Motor intake(-15); // reverse the direction 
 
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
@@ -22,7 +22,7 @@ pros::Imu imu(10);
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
-pros::Rotation horizontalEnc(14);
+pros::Rotation horizontalEnc(17);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(16);
 // horizontal tracking wheel. 
@@ -143,7 +143,7 @@ void competition_initialize() {}
 
 // path file name is "LukeTest.txt".
 // "." is replaced with "_" to overcome c++ limitations
-//ASSET(LukeTest2_txt);
+ASSET(FullBasicPathPt1);
 
 void autonomous() {
     // set chassis pose
@@ -151,14 +151,18 @@ void autonomous() {
     chassis.setPose(0, 5, 0);
     chassis.setPose(0, 0, 0);//moves back??
     //OR does THIS move it back?
-    chassis.setPose(0, -5, 0);
+    //chassis.setPose(0, -5, 0);
+
+
+    //chassis.follow(FullBasicPathPt1, 15, 2000);
+
 
 
 
 
     
-    chassis.moveToPose(0, 0, 90, 5000);
-    chassis.moveToPoint(40.555, 0.517, 5000);
+    //chassis.moveToPose(0, 0, 90, 5000);
+    //chassis.moveToPoint(40.555, 0.517, 5000);
     
 
     // create a timer that will wait for 1 second
@@ -170,7 +174,6 @@ void autonomous() {
 
     // lookahead distance: 15 inches
     // timeout: 2000 ms
-    // chassis.follow(LukeTest2_txt, 15, 2000);
 }
 
 /**
