@@ -1,14 +1,11 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
 #include "lemlib/chassis/trackingWheel.hpp"
-<<<<<<< HEAD
 #include "pros/rtos.hpp"
 //#include "setUp.cpp"
 
 pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
 pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
-=======
->>>>>>> e7e444c62d5196086668c87e881469fab551c6d9
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -20,8 +17,6 @@ pros::Motor intake(-15); // reverse the direction
 pros::adi::Pneumatics mogoMech('A', true);
 pros::adi::Pneumatics hang('B', false);
 
-
-pros::adi::Pneumatics hang('B', true);
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -160,18 +155,13 @@ void autonIntake(int seconds)
 
 // path file name is "LukeTest.txt".
 // "." is replaced with "_" to overcome c++ limitations
-<<<<<<< HEAD
 ASSET(BasicPathPt1);
 ASSET(BasicPathPt2);
 
-=======
-ASSET(LukeTest2_txt);
->>>>>>> e7e444c62d5196086668c87e881469fab551c6d9
 
 void autonomous() {
     // set chassis pose
     chassis.setPose(0, 0, 0);
-<<<<<<< HEAD
     autonIntake(1);
     chassis.moveToPose(0, 5, 0, 5000);
     chassis.moveToPose(0, 0, 0, 5000);//moves back??
@@ -209,11 +199,6 @@ void autonomous() {
 
     // lookahead distance: 15 inches
     // timeout: 2000 ms
-=======
-    // lookahead distance: 15 inches
-    // timeout: 2000 ms
-    chassis.follow(LukeTest2_txt, 15, 2000);
->>>>>>> e7e444c62d5196086668c87e881469fab551c6d9
 }
 
 
@@ -247,21 +232,9 @@ void opcontrol() {
 
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-<<<<<<< HEAD
             mogoMech.set_value(false);//clamps mogo
         } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
             mogoMech.set_value(true);//releases mogo
-=======
-            mogoMech.set_value(false);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-            mogoMech.set_value(true);
->>>>>>> e7e444c62d5196086668c87e881469fab551c6d9
-        }
-
-        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-            hang.set_value(false);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-            hang.set_value(true);
         }
 
         // delay to save resources
