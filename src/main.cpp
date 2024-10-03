@@ -157,9 +157,11 @@ ASSET(BasicPathPt2_txt);
 
 
 void autonomous() {
+    chassis.setPose(0, 0, 0);
+
+    
     /*
     // set chassis pose
-    chassis.setPose(0, 0, 0);
     autonIntake(1);
     chassis.moveToPose(0, 5, 0, 5000);
     chassis.moveToPose(0, 0, 0, 5000);//moves back??
