@@ -1,6 +1,7 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
 #include "lemlib/chassis/trackingWheel.hpp"
+#include "pros/rtos.hpp"
 //#include "setUp.cpp"
 
 pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
@@ -14,7 +15,7 @@ pros::Motor intake(-15); // reverse the direction
 
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
-pros::adi::Pneumatics hang('B', true);
+pros::adi::Pneumatics hang('B', false);
 
 
 // Inertial Sensor on port 10
@@ -141,20 +142,41 @@ void competition_initialize() {}
  */
 
 
+void autonIntake(int seconds)
+{
+    int miliSeconds = seconds * 1000;
+    intake.move(127);
+    pros::delay(miliSeconds);
+    intake.move(0);
+}
+
 // path file name is "LukeTest.txt".
 // "." is replaced with "_" to overcome c++ limitations
-ASSET(FullBasicPathPt1);
+ASSET(BasicPathPt1);
+ASSET(BasicPathPt2);
+
 
 void autonomous() {
     // set chassis pose
     chassis.setPose(0, 0, 0);
-    chassis.setPose(0, 5, 0);
-    chassis.setPose(0, 0, 0);//moves back??
+    autonIntake(1);
+    chassis.moveToPose(0, 5, 0, 5000);
+    chassis.moveToPose(0, 0, 0, 5000);//moves back??
     //OR does THIS move it back?
     //chassis.setPose(0, -5, 0);
 
 
-    //chassis.follow(FullBasicPathPt1, 15, 2000);
+    /*
+    mogoMech.set_value(false);//clamps mogo
+    pros::delay(1000);
+    mogoMech.set_value(false);//releases mogo
+    */
+
+
+    /*
+    chassis.follow(BasicPathPt1, 15, 2000);
+    chassis.follow(BasicPathPt2, 15, 2000);
+    */
 
 
 
@@ -175,6 +197,8 @@ void autonomous() {
     // lookahead distance: 15 inches
     // timeout: 2000 ms
 }
+
+
 
 /**
  * Runs in driver control
@@ -205,9 +229,9 @@ void opcontrol() {
 
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-            mogoMech.set_value(false);
+            mogoMech.set_value(false);//clamps mogo
         } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-            mogoMech.set_value(true);
+            mogoMech.set_value(true);//releases mogo
         }
 
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
