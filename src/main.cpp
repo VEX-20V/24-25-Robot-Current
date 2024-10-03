@@ -165,8 +165,6 @@ void autonomous() {
     //OR does THIS move it back?
     //chassis.setPose(0, -5, 0);
 
-    //added a comment to test GitHub changes
-
     /*
     mogoMech.set_value(false);//clamps mogo
     pros::delay(1000);
