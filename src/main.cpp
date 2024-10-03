@@ -131,9 +131,6 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-// get a path used for pure pursuit
-// this needs to be put outside a function
-ASSET(example_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -150,15 +147,21 @@ void autonIntake(int seconds)
     intake.move(0);
 }
 
-// path file name is "LukeTest.txt".
-// "." is replaced with "_" to overcome c++ limitations
+// get a path used for pure pursuit
+// this needs to be put outside a function
 ASSET(BasicPathPt1_txt);
 ASSET(BasicPathPt2_txt);
 
 
 void autonomous() {
     chassis.setPose(0, 0, 0);
+    chassis.moveToPoint(0, 0, 5000);
+    chassis.moveToPoint(14.207, -22.215, 5000);
 
+    /*
+    chassis.moveToPoint(0, 0, 5000);
+    chassis.moveToPoint(5.662, 25.754, 5000);
+    */
     
     /*
     // set chassis pose
@@ -176,11 +179,11 @@ void autonomous() {
     */
 
 
-    
+    /*    
     chassis.follow(BasicPathPt1_txt, 15, 2000, true);
     pros::delay(1000);
     chassis.follow(BasicPathPt2_txt, 15, 2000, true);
-
+    */
 
 
 
@@ -236,6 +239,14 @@ void opcontrol() {
         } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
             mogoMech.set_value(true);//releases mogo
         }
+
+        //Hang Controlling
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+            hang.set_value(false);//clamps hang ???
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            hang.set_value(true);//releases hang ???
+        }
+
 
         // delay to save resources
         pros::delay(10);
