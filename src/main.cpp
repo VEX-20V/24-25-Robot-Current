@@ -17,6 +17,8 @@ pros::Motor intake(-15); // reverse the direction
 pros::adi::Pneumatics mogoMech('A', true);
 pros::adi::Pneumatics hang('B', false);
 
+//LED CLASS
+pros::adi::Led led('C', 14);
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -96,7 +98,6 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
-    
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -216,11 +217,15 @@ void opcontrol() {
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
 
+        if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_Y)) {
+                    led.set_all(0x0000FF);
+        }
 
         //intake controlling
         int speed = 127;
         if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_R1)) {
         intake.move(speed);
+
         } else if (master.get_digital(pros :: E_CONTROLLER_DIGITAL_R2)) {
         intake.move(-speed);
         } else {
