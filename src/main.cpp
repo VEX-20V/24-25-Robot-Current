@@ -95,6 +95,14 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+void red_lights() {
+    led.set_all(0xFF0000);
+}
+
+void blue_lights() {
+    led.set_all(0x0000FF);
+}
+
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
@@ -118,9 +126,17 @@ void initialize() {
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
             // delay to save resources
             pros::delay(50);
+            
+
+            //set robot lights to blue on center button
+            pros::lcd::register_btn1_cb(blue_lights);
+
+            // //set robot lights to red on center button
+            // pros::lcd::register_btn0_cb(red_lights);
         }
     });
 }
+
 
 /**
  * Runs while the robot is disabled
@@ -216,9 +232,7 @@ void opcontrol() {
 
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
-
-        //set the light to red 
-        led.set_all(0xFF0000);    
+   
 
         //intake controlling
         int speed = 127;
