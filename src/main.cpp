@@ -40,9 +40,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
-lemlib::ControllerSettings linearController (19, // proportional gain (kP)
+lemlib::ControllerSettings linearController (18, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              3, // derivative gain (kD)
+                                              7, // derivative gain (kD)
                                               0, // anti windup
                                               0, // small error range, in inches
                                               0, // small error range timeout, in milliseconds
@@ -155,7 +155,7 @@ void autonomous() {
 
     // set position to x:0, y:0, heading:0
     chassis.setPose(0, 0, 0);
-    chassis.moveToPoint(0, 10, 100000); // move the chassis to (10, 10, 90)
+    chassis.moveToPoint(0, 7, 100000); // move the chassis to (10, 10, 90)
                                       // with a timeout of 4000 ms
     /*
     // set chassis pose
