@@ -34,6 +34,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
+<<<<<<< Updated upstream
 // lateral motion controller
 lemlib::ControllerSettings linearController(10, // proportional gain (kP)
                                             0, // integral gain (kI)
@@ -44,6 +45,17 @@ lemlib::ControllerSettings linearController(10, // proportional gain (kP)
                                             3, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
                                             20 // maximum acceleration (slew)
+=======
+lemlib::ControllerSettings linearController (100, // proportional gain (kP)
+                                              0, // integral gain (kI)
+                                              3, // derivative gain (kD)
+                                              0, // anti windup
+                                              0, // small error range, in inches
+                                              0, // small error range timeout, in milliseconds
+                                              0, // large error range, in inches
+                                              0, // large error range timeout, in milliseconds
+                                              0 // maximum acceleration (slew)
+>>>>>>> Stashed changes
 );
 
 // angular motion controller
@@ -141,8 +153,78 @@ void competition_initialize() {}
 //ASSET(LukeTest2_txt);
 
 void autonomous() {
+<<<<<<< Updated upstream
     // set chassis pose
     chassis.setPose(0, 0, 0);
+=======
+
+    // sets position / origin (what every other position will now be based on)
+    chassis.setPose(-59.282, 37.344, 245);
+
+    //moves to mogo
+    chassis.moveToPose(-30.776, -26.978, 245, 4000); //motion 1 of 3
+    mogoMech.set_value(false); //clamps mogo
+    autonIntake(2); //scores preload
+
+    //moves to ring
+    chassis.moveToPose(-43.262, -44.411, 225, 4000); //motion 2 of 3
+    autonIntake(3); //intakes and scores ring
+    pros::delay(1000);
+    mogoMech.set_value(false);//releases mogo
+
+    //touches bar
+    chassis.moveToPose(-16.642, -12.844, 225, 4000); //motion 3 of 3
+
+    /*
+    chassis.moveTo(0, 0, 5000);
+    chassis.moveTo(-2.652, -30.216, 5000);
+    chassis.moveTo(-13.175, -11.532, 5000);
+    chassis.moveTo(4.184, -48.999, 5000);
+
+    chassis.moveTo(-59.282, -37.344, 5000);
+    chassis.moveTo(-30.776, -26.978, 5000);
+    chassis.moveTo(-43.262, -44.411, 5000);
+    chassis.moveTo(-16.642, -12.844, 5000);
+    */
+
+    /*
+    // set chassis pose
+    autonIntake(1);
+    chassis.moveToPose(0, 5, 0, 5000);
+    chassis.moveToPose(0, 0, 0, 5000);//moves back. 
+    //OR does THIS move it back?
+    //chassis.setPose(0, -5, 0);
+    */
+
+    /*
+    mogoMech.set_value(false);//clamps mogo
+    pros::delay(1000);
+    mogoMech.set_value(false);//releases mogo
+    */
+
+
+    /*    
+    chassis.follow(BasicPathPt1_txt, 15, 2000, true);
+    pros::delay(1000);
+    chassis.follow(BasicPathPt2_txt, 15, 2000, true);
+    */
+
+
+
+
+    
+    //chassis.moveToPose(0, 0, 90, 5000);
+    //chassis.moveToPoint(40.555, 0.517, 5000);
+    
+
+    // create a timer that will wait for 1 second
+    // check if the timer is done
+        
+
+    //chassis.setPose(0, 0, 0);//does this bring it back or make it not move?
+    //basically, is it incremental or absolute coordinates? Hopefully absolute plz. 
+
+>>>>>>> Stashed changes
     // lookahead distance: 15 inches
     // timeout: 2000 ms
    // chassis.follow(LukeTest2_txt, 15, 2000);
