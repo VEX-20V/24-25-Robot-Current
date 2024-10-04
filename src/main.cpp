@@ -138,6 +138,7 @@ void competition_initialize() {}
  */
 
 
+//auton helper functions
 void autonIntake(int seconds)
 {
     int miliSeconds = seconds * 1000;
@@ -151,31 +152,56 @@ void autonIntake(int seconds)
 ASSET(BasicPathPt1_txt);
 ASSET(BasicPathPt2_txt);
 
-
-void autonomous() {
-
-    // sets position / origin (what every other position will now be based on)
+//auton Path functions
+void autonPath1()
+{
+        // sets position / origin (what every other position will now be based on)
     chassis.setPose(-59.282, -34.344, 245);
-
-    //chassis.turnToHeading(0, 2000);
 
     //moves to mogo
     chassis.moveToPose(-30.776, -26.978, 245, 4000, {false}); //motion 1 of 3
 
-    /*
     mogoMech.set_value(false); //clamps mogo
     autonIntake(2); //scores preload
 
     //moves to ring
-    chassis.moveToPose(-43.262, -44.411, 225, 4000); //motion 2 of 3
+    chassis.moveToPose(-43.262, -44.411, 225, 4000, {true}); //motion 2 of 3
     autonIntake(3); //intakes and scores ring
     pros::delay(1000);
     mogoMech.set_value(false);//releases mogo
 
     //touches bar
-    chassis.moveToPose(-16.642, -12.844, 225, 4000); //motion 3 of 3
-    */
+    chassis.moveToPose(-16.642, -12.844, 225, 4000, {false}); //motion 3 of 3
 }
+
+void autonPath1Origional()
+{
+    // sets position / origin (what every other position will now be based on)
+    chassis.setPose(-47.626, -34.678, 245);
+
+    //moves to mogo
+    chassis.moveToPose(-29.758, -26.296, 232.9, 4000, {false}); //motion 1 of 3
+
+    mogoMech.set_value(false); //clamps mogo
+    autonIntake(2); //scores preload
+
+    //moves to ring
+    chassis.moveToPose(-23.606, -47.094, 345, 4000, {true}); //motion 2 of 3
+    autonIntake(3); //intakes and scores ring
+    pros::delay(1000);
+    mogoMech.set_value(false);//releases mogo
+
+    //touches bar
+    chassis.moveToPose(-16.642, -12.844, 225, 4000, {false}); //motion 3 of 3
+
+    //chassis.turnToHeading(0, 2000);
+}
+
+void autonomous() 
+{
+    autonPath1();
+}
+
 
 
 
