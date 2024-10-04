@@ -1,5 +1,6 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
+#include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/rtos.hpp"
 //#include "setUp.cpp"
@@ -154,10 +155,14 @@ ASSET(BasicPathPt2_txt);
 void autonomous() {
 
     // sets position / origin (what every other position will now be based on)
-    chassis.setPose(-59.282, 37.344, 245);
+    chassis.setPose(-59.282, -34.344, 245);
+
+    //chassis.turnToHeading(0, 2000);
 
     //moves to mogo
-    chassis.moveToPose(-30.776, -26.978, 245, 4000); //motion 1 of 3
+    chassis.moveToPose(-30.776, -26.978, 245, 4000, {false}); //motion 1 of 3
+
+    /*
     mogoMech.set_value(false); //clamps mogo
     autonIntake(2); //scores preload
 
@@ -169,6 +174,7 @@ void autonomous() {
 
     //touches bar
     chassis.moveToPose(-16.642, -12.844, 225, 4000); //motion 3 of 3
+    */
 }
 
 
