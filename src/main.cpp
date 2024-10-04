@@ -1,23 +1,29 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
 #include "lemlib/chassis/trackingWheel.hpp"
-#include "setUp.cpp"
+#include "pros/rtos.hpp"
+//#include "setUp.cpp"
+
+pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
+pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 //Intake 
-pros::Motor intake(-4); // reverse the direction 
+pros::Motor intake(-15); // reverse the direction 
 
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
+pros::adi::Pneumatics hang('B', false);
+
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
-pros::Rotation horizontalEnc(14);
+pros::Rotation horizontalEnc(17);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(16);
 // horizontal tracking wheel. 
@@ -34,18 +40,6 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
-<<<<<<< Updated upstream
-// lateral motion controller
-lemlib::ControllerSettings linearController(10, // proportional gain (kP)
-                                            0, // integral gain (kI)
-                                            3, // derivative gain (kD)
-                                            3, // anti windup
-                                            1, // small error range, in inches
-                                            100, // small error range timeout, in milliseconds
-                                            3, // large error range, in inches
-                                            500, // large error range timeout, in milliseconds
-                                            20 // maximum acceleration (slew)
-=======
 lemlib::ControllerSettings linearController (100, // proportional gain (kP)
                                               0, // integral gain (kI)
                                               3, // derivative gain (kD)
@@ -55,19 +49,17 @@ lemlib::ControllerSettings linearController (100, // proportional gain (kP)
                                               0, // large error range, in inches
                                               0, // large error range timeout, in milliseconds
                                               0 // maximum acceleration (slew)
->>>>>>> Stashed changes
 );
 
-// angular motion controller
 lemlib::ControllerSettings angularController(2, // proportional gain (kP)
-                                             0, // integral gain (kI)
-                                             10, // derivative gain (kD)
-                                             3, // anti windup
-                                             1, // small error range, in degrees
-                                             100, // small error range timeout, in milliseconds
-                                             3, // large error range, in degrees
-                                             500, // large error range timeout, in milliseconds
-                                             0 // maximum acceleration (slew)
+                                              -.1, // integral gain (kI)
+                                              12, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in inches
+                                              50, // small error range timeout, in milliseconds
+                                              3, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              0 // maximum acceleration (slew)
 );
 
 // sensors for odometry
@@ -137,9 +129,6 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-// get a path used for pure pursuit
-// this needs to be put outside a function
-//ASSET(example_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -148,15 +137,21 @@ void competition_initialize() {}
  */
 
 
-// path file name is "LukeTest.txt".
-// "." is replaced with "_" to overcome c++ limitations
-//ASSET(LukeTest2_txt);
+void autonIntake(int seconds)
+{
+    int miliSeconds = seconds * 1000;
+    intake.move(127);
+    pros::delay(miliSeconds);
+    intake.move(0);
+}
+
+// get a path used for pure pursuit
+// this needs to be put outside a function
+ASSET(BasicPathPt1_txt);
+ASSET(BasicPathPt2_txt);
+
 
 void autonomous() {
-<<<<<<< Updated upstream
-    // set chassis pose
-    chassis.setPose(0, 0, 0);
-=======
 
     // sets position / origin (what every other position will now be based on)
     chassis.setPose(-59.282, 37.344, 245);
@@ -224,11 +219,11 @@ void autonomous() {
     //chassis.setPose(0, 0, 0);//does this bring it back or make it not move?
     //basically, is it incremental or absolute coordinates? Hopefully absolute plz. 
 
->>>>>>> Stashed changes
     // lookahead distance: 15 inches
     // timeout: 2000 ms
-   // chassis.follow(LukeTest2_txt, 15, 2000);
 }
+
+
 
 /**
  * Runs in driver control
@@ -259,8 +254,18 @@ void opcontrol() {
 
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-            mogoMech.set_value(false);
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+            mogoMech.set_value(false);//clamps mogo
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            mogoMech.set_value(true);//releases mogo
+        }
+
+        //Hang Controlling
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+            hang.set_value(false);//clamps hang ???
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            hang.set_value(true);//releases hang ???
+        }
+
 
         // delay to save resources
         pros::delay(10);
