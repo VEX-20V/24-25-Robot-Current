@@ -30,9 +30,9 @@ pros::Rotation horizontalEnc(17);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(16);
 // horizontal tracking wheel. 
-lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -0.63610);
+lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -0.944596);
 // vertical tracking wheel. 
-lemlib::TrackingWheel vertical(&verticalEnc, 2, -.3285);
+lemlib::TrackingWheel vertical(&verticalEnc, 2, 0);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
@@ -157,6 +157,8 @@ ASSET(BasicPathPt2_txt);
 //auton Path functions
 void autonPath1()
 {
+    mogoMech.set_value(false); //releases mogo
+
     // sets position / origin (what every other position will now be based on)
     chassis.setPose(-47.469, -37.219, 235);
 
@@ -184,11 +186,9 @@ void autonPath1()
 
 void TestMogo()
 {
-    mogoMech.set_value(true); //releases mogo
+    mogoMech.set_value(false); //releases mogo
     pros::delay(1000);
-    mogoMech.set_value(false); //clamps mogo
-    pros::delay(1000);
-    mogoMech.set_value(true); //releases mogo
+    mogoMech.set_value(true); //clamp mogo
 
 }
 
