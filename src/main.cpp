@@ -18,7 +18,10 @@ pros::adi::Pneumatics mogoMech('A', true);
 pros::adi::Pneumatics hang('B', false);
 
 //LED CLASS
-pros::adi::Led led('C', 14);
+pros::adi::Led led1('C', 30);
+pros::adi::Led led2('B', 41);
+pros::adi::Led led3('A', 15);
+
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -96,11 +99,17 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * to keep execution time for this mode under a few seconds.
  */
 void red_lights() {
-    led.set_all(0xFF0000);
+    led1.set_all(0xFF0000);
+    
+    led2.set_all(0xFF0000);
+    
+    led3.set_all(0xFF0000);
 }
 
 void blue_lights() {
-    led.set_all(0x0000FF);
+    led1.set_all(0x0000FF);
+    led2.set_all(0x0000FF);
+    led3.set_all(0x0000FF);
 }
 
 void initialize() {
@@ -132,7 +141,8 @@ void initialize() {
             pros::lcd::register_btn1_cb(blue_lights);
 
             // //set robot lights to red on center button
-            // pros::lcd::register_btn0_cb(red_lights);
+            
+            //pros::lcd::register_btn0_cb(red_lights);
         }
     });
 }
