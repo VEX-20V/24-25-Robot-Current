@@ -1,6 +1,5 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
-#include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/rtos.hpp"
 //#include "setUp.cpp"
@@ -16,14 +15,10 @@ pros::Motor intake(-15); // reverse the direction
 
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
-
-//Hang
 pros::adi::Pneumatics hang('B', false);
 
 //LED CLASS
 pros::adi::Led led1('C', 30);
-
-
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -34,54 +29,41 @@ pros::Rotation horizontalEnc(17);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(16);
 // horizontal tracking wheel. 
-lemlib::TrackingWheel horizontal(&horizontalEnc, 1.95, -0.944596);
+lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -0.63610);
 // vertical tracking wheel. 
-lemlib::TrackingWheel vertical(&verticalEnc, 1.95, 0);
+lemlib::TrackingWheel vertical(&verticalEnc, 2, -.3285);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               &rightMotors, // right motor group
-                              11, // 10 inch track width (from L-->center)
+                              5.8, // 10 inch track width (from L-->center)
                               lemlib::Omniwheel::NEW_325, // using new 4" omnis
                               360, // drivetrain rpm is 360
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
-/* Siona's Tuning
-lemlib::ControllerSettings linearController (9, // proportional gain (kP)
-                                              0, // integral gain (kI)
-                                              7, // derivative gain (kD)
-                                              3, // anti windup
-                                              1, // small error range, in inches
-                                              100, // small error range timeout, in milliseconds
-                                              3, // large error range, in inches
-                                              500, // large error range timeout, in milliseconds
-                                              20 // maximum acceleration (slew)
-);
-*/
-
-//Luke's Tuning
-lemlib::ControllerSettings linearController(60, // proportional gain (kP)
-                                              0, // integral gain (kI)
-                                              20, // derivative gain (kD)
-                                              2, // anti windup
-                                              .8, // small error range, in inches
-                                              100, // small error range timeout, in milliseconds
-                                              2, // large error range, in inches
-                                              500, // large error range timeout, in milliseconds
-                                              20 // maximum acceleration (slew)
+// lateral motion controller
+lemlib::ControllerSettings linearController(10, // proportional gain (kP)
+                                            0, // integral gain (kI)
+                                            3, // derivative gain (kD)
+                                            3, // anti windup
+                                            1, // small error range, in inches
+                                            100, // small error range timeout, in milliseconds
+                                            3, // large error range, in inches
+                                            500, // large error range timeout, in milliseconds
+                                            20 // maximum acceleration (slew)
 );
 
-
+// angular motion controller
 lemlib::ControllerSettings angularController(2, // proportional gain (kP)
-                                              -.1, // integral gain (kI)
-                                              12, // derivative gain (kD)
-                                              3, // anti windup
-                                              1, // small error range, in inches
-                                              50, // small error range timeout, in milliseconds
-                                              3, // large error range, in inches
-                                              500, // large error range timeout, in milliseconds
-                                              0 // maximum acceleration (slew)
+                                             0, // integral gain (kI)
+                                             10, // derivative gain (kD)
+                                             3, // anti windup
+                                             1, // small error range, in degrees
+                                             100, // small error range timeout, in milliseconds
+                                             3, // large error range, in degrees
+                                             500, // large error range timeout, in milliseconds
+                                             0 // maximum acceleration (slew)
 );
 
 // sensors for odometry
@@ -113,11 +95,18 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+void red_lights() {
+    led1.set_all(0xFF0000);
+}
+
+void blue_lights() {
+    led1.set_all(0x0000FF);
+}
+
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
     
-
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
     // lemlib::bufferedStdout().setRate(...);
@@ -137,9 +126,18 @@ void initialize() {
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
             // delay to save resources
             pros::delay(50);
+            
+
+            //set robot lights to blue on center button
+            pros::lcd::register_btn0_cb(red_lights);
+            pros::lcd::register_btn1_cb(blue_lights);
+
+            // //set robot lights to red on center button
+            
         }
     });
 }
+
 
 /**
  * Runs while the robot is disabled
@@ -151,6 +149,9 @@ void disabled() {}
  */
 void competition_initialize() {}
 
+// get a path used for pure pursuit
+// this needs to be put outside a function
+ASSET(example_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -159,7 +160,6 @@ void competition_initialize() {}
  */
 
 
-//auton helper functions
 void autonIntake(int seconds)
 {
     int miliSeconds = seconds * 1000;
@@ -168,87 +168,52 @@ void autonIntake(int seconds)
     intake.move(0);
 }
 
-// get a path used for pure pursuit
-// this needs to be put outside a function
-ASSET(BasicPathPt1_txt);
-ASSET(BasicPathPt2_txt);
+// path file name is "LukeTest.txt".
+// "." is replaced with "_" to overcome c++ limitations
+ASSET(BasicPathPt1);
+ASSET(BasicPathPt2);
 
-//auton Path functions
-void autonPath1()
-{
-    mogoMech.set_value(false); //releases mogo
 
-    // sets position / origin (what every other position will now be based on)
-    chassis.setPose(-47.469, -37.219, 235);
+void autonomous() {
+    // set chassis pose
+    chassis.setPose(0, 0, 0);
+    autonIntake(1);
+    chassis.moveToPose(0, 5, 0, 5000);
+    chassis.moveToPose(0, 0, 0, 5000);//moves back??
+    //OR does THIS move it back?
+    //chassis.setPose(0, -5, 0);
 
-    //moves to mogo
-    chassis.moveToPose(-29.758, -26.296, 235, 4000, {false}); //motion 1 of 3
 
-    mogoMech.set_value(true); //clamps mogo
-    autonIntake(2); //scores preload
-
-    chassis.turnToHeading(165, 4000);
-
-    //moves to ring
-    chassis.moveToPose(-23.606, -47.094, 165, 4000, {true}); //motion 2 of 3
-    autonIntake(3); //intakes and scores ring
+    /*
+    mogoMech.set_value(false);//clamps mogo
     pros::delay(1000);
     mogoMech.set_value(false);//releases mogo
-
-    chassis.turnToHeading(205, 4000);
-
-
-    //touches bar
-    chassis.moveToPose(-9.868, -18.289, 205, 4000, {false}); //motion 3 of 3
-}
+    */
 
 
-//testing*************************************************************
-void TestMogo()
-{
-    mogoMech.set_value(false); //releases mogo
-    pros::delay(1000);
-    mogoMech.set_value(true); //clamp mogo
-
-}
-
-void TurnTest()
-{
-    chassis.setPose(0, 0, 0);
-    chassis.turnToHeading(90, 4000);
-
-}
-
-//MOGO MECH WORKS RAAAAAAA
-void StraitTest()
-{
-    pros::lcd::print(5, "before travelling");
-    chassis.setPose(0, 0, 0);
-    chassis.moveToPose(0, -24, 0, 4000, {false});
-    pros::lcd::print(6, "traveled 24 inches");
-    pros::delay(1000);
-    mogoMech.set_value(true); //clamps mogo
-    chassis.moveToPose(0, 0, 0, 1000);
-
-}//testing*************************************************************
-
-void TouchBarAuton()
-{
-    chassis.setPose(-47.469, -37.219, 235);
-
-    //moves to mogo
-    chassis.moveToPose(-12.709, -6.664, 235, 4000, {false}); //motion 1 of 3
-
-}
+    /*
+    chassis.follow(BasicPathPt1, 15, 2000);
+    chassis.follow(BasicPathPt2, 15, 2000);
+    */
 
 
-void autonomous() 
-{
-    //mogoMech.set_value(false); // mogo released
-    //StraitTest();
-    //TurnTest();
-    //autonPath1();
-    TouchBarAuton();
+
+
+
+    
+    //chassis.moveToPose(0, 0, 90, 5000);
+    //chassis.moveToPoint(40.555, 0.517, 5000);
+    
+
+    // create a timer that will wait for 1 second
+    // check if the timer is done
+        
+
+    //chassis.setPose(0, 0, 0);//does this bring it back or make it not move?
+    //basically, is it incremental or absolute coordinates? Hopefully absolute plz. 
+
+    // lookahead distance: 15 inches
+    // timeout: 2000 ms
 }
 
 
@@ -268,12 +233,13 @@ void opcontrol() {
 
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
-
+   
 
         //intake controlling
         int speed = 127;
         if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_R1)) {
         intake.move(speed);
+    
         } else if (master.get_digital(pros :: E_CONTROLLER_DIGITAL_R2)) {
         intake.move(-speed);
         } else {
@@ -282,18 +248,10 @@ void opcontrol() {
 
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-            mogoMech.set_value(true);//clamps mogo
+            mogoMech.set_value(false);//clamps mogo
         } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-            mogoMech.set_value(false);//releases mogo
+            mogoMech.set_value(true);//releases mogo
         }
-
-        //Hang Controlling
-        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-            hang.set_value(false);//clamps hang ???
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-            hang.set_value(true);//releases hang ???
-        }
-
 
         // delay to save resources
         pros::delay(10);
