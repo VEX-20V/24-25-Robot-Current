@@ -138,11 +138,11 @@ void initialize() {
             
 
             //set robot lights to blue on center button
+            pros::lcd::register_btn0_cb(red_lights);
             pros::lcd::register_btn1_cb(blue_lights);
 
             // //set robot lights to red on center button
             
-            //pros::lcd::register_btn0_cb(red_lights);
         }
     });
 }
