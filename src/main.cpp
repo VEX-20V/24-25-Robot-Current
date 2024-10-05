@@ -19,9 +19,6 @@ pros::adi::Pneumatics hang('B', false);
 
 //LED CLASS
 pros::adi::Led led1('C', 30);
-pros::adi::Led led2('B', 41);
-pros::adi::Led led3('A', 15);
-
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -100,16 +97,10 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  */
 void red_lights() {
     led1.set_all(0xFF0000);
-    
-    led2.set_all(0xFF0000);
-    
-    led3.set_all(0xFF0000);
 }
 
 void blue_lights() {
     led1.set_all(0x0000FF);
-    led2.set_all(0x0000FF);
-    led3.set_all(0x0000FF);
 }
 
 void initialize() {
