@@ -228,13 +228,23 @@ void StraitTest()
 
 }//testing*************************************************************
 
+void TouchBarAuton()
+{
+    chassis.setPose(-47.469, -37.219, 235);
+
+    //moves to mogo
+    chassis.moveToPose(-12.709, -6.664, 235, 4000, {false}); //motion 1 of 3
+
+}
+
 
 void autonomous() 
 {
-    mogoMech.set_value(false); // mogo released
-    StraitTest();
+    //mogoMech.set_value(false); // mogo released
+    //StraitTest();
     //TurnTest();
     //autonPath1();
+    TouchBarAuton();
 }
 
 
