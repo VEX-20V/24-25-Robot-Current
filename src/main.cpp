@@ -30,14 +30,14 @@ pros::Rotation horizontalEnc(17);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(16);
 // horizontal tracking wheel. 
-lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -0.944596);
+lemlib::TrackingWheel horizontal(&horizontalEnc, 1.95, -0.944596);
 // vertical tracking wheel. 
-lemlib::TrackingWheel vertical(&verticalEnc, 2, 0);
+lemlib::TrackingWheel vertical(&verticalEnc, 1.95, 0);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               &rightMotors, // right motor group
-                              5.8, // 10 inch track width (from L-->center)
+                              11, // 10 inch track width (from L-->center)
                               lemlib::Omniwheel::NEW_325, // using new 4" omnis
                               360, // drivetrain rpm is 360
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
@@ -56,14 +56,14 @@ lemlib::ControllerSettings linearController (9, // proportional gain (kP)
 );
 */
 
-//default tuning
-lemlib::ControllerSettings linearController(10, // proportional gain (kP)
+//Luke's Tuning
+lemlib::ControllerSettings linearController(60, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              3, // derivative gain (kD)
-                                              3, // anti windup
-                                              1, // small error range, in inches
+                                              20, // derivative gain (kD)
+                                              2, // anti windup
+                                              .8, // small error range, in inches
                                               100, // small error range timeout, in milliseconds
-                                              3, // large error range, in inches
+                                              2, // large error range, in inches
                                               500, // large error range timeout, in milliseconds
                                               20 // maximum acceleration (slew)
 );
@@ -217,16 +217,23 @@ void TurnTest()
 
 void StraitTest()
 {
+    pros::lcd::print(5, "before travelling");
     chassis.setPose(0, 0, 0);
-    chassis.moveToPose(0, 24, 0, 1000);
-}
-//testing*************************************************************
+    chassis.moveToPose(0, -24, 0, 4000, {false});
+    pros::lcd::print(6, "traveled 24 inches");
+    pros::delay(1000);
+    mogoMech.set_value(true); //clamps mogo
+    chassis.moveToPose(0, 0, 0, 1000);
+
+}//testing*************************************************************
 
 
 void autonomous() 
 {
+    mogoMech.set_value(false); // mogo released
+    StraitTest();
     //TurnTest();
-    autonPath1();
+    //autonPath1();
 }
 
 
