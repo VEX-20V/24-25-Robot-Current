@@ -43,6 +43,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
+/* Siona's Tuning
 lemlib::ControllerSettings linearController (9, // proportional gain (kP)
                                               0, // integral gain (kI)
                                               7, // derivative gain (kD)
@@ -53,6 +54,20 @@ lemlib::ControllerSettings linearController (9, // proportional gain (kP)
                                               500, // large error range timeout, in milliseconds
                                               20 // maximum acceleration (slew)
 );
+*/
+
+//default tuning
+lemlib::ControllerSettings linearController(10, // proportional gain (kP)
+                                              0, // integral gain (kI)
+                                              3, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              3, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              20 // maximum acceleration (slew)
+);
+
 
 lemlib::ControllerSettings angularController(2, // proportional gain (kP)
                                               -.1, // integral gain (kI)
@@ -184,6 +199,7 @@ void autonPath1()
 }
 
 
+//testing*************************************************************
 void TestMogo()
 {
     mogoMech.set_value(false); //releases mogo
@@ -192,14 +208,26 @@ void TestMogo()
 
 }
 
-//connent
+void TurnTest()
+{
+    chassis.setPose(0, 0, 0);
+    chassis.turnToHeading(90, 4000);
+
+}
+
+void StraitTest()
+{
+    chassis.setPose(0, 0, 0);
+    chassis.moveToPose(0, 24, 0, 1000);
+}
+//testing*************************************************************
+
 
 void autonomous() 
 {
-    //TestMogo();
+    //TurnTest();
     autonPath1();
 }
-
 
 
 
