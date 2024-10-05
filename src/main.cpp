@@ -165,7 +165,7 @@ void autonPath1()
     //moves to mogo
     chassis.moveToPose(-29.758, -26.296, 235, 4000, {false}); //motion 1 of 3
 
-    mogoMech.set_value(false); //clamps mogo
+    mogoMech.set_value(true); //clamps mogo
     autonIntake(2); //scores preload
 
     chassis.turnToHeading(165, 4000);
@@ -196,8 +196,8 @@ void TestMogo()
 
 void autonomous() 
 {
-    TestMogo();
-    //autonPath1();
+    //TestMogo();
+    autonPath1();
 }
 
 
