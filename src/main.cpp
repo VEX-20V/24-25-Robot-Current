@@ -16,6 +16,8 @@ pros::Motor intake(-15); // reverse the direction
 
 //Piston mogo mech 
 pros::adi::Pneumatics mogoMech('A', true);
+
+//Hang
 pros::adi::Pneumatics hang('B', false);
 
 
@@ -41,15 +43,15 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
-lemlib::ControllerSettings linearController (100, // proportional gain (kP)
+lemlib::ControllerSettings linearController (9, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              3, // derivative gain (kD)
-                                              0, // anti windup
-                                              0, // small error range, in inches
-                                              0, // small error range timeout, in milliseconds
-                                              0, // large error range, in inches
-                                              0, // large error range timeout, in milliseconds
-                                              0 // maximum acceleration (slew)
+                                              7, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              3, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              20 // maximum acceleration (slew)
 );
 
 lemlib::ControllerSettings angularController(2, // proportional gain (kP)
@@ -155,51 +157,43 @@ ASSET(BasicPathPt2_txt);
 //auton Path functions
 void autonPath1()
 {
-        // sets position / origin (what every other position will now be based on)
-    chassis.setPose(-59.282, -34.344, 245);
-
-    //moves to mogo
-    chassis.moveToPose(-30.776, -26.978, 245, 4000, {false}); //motion 1 of 3
-
-    mogoMech.set_value(false); //clamps mogo
-    autonIntake(2); //scores preload
-
-    //moves to ring
-    chassis.moveToPose(-43.262, -44.411, 225, 4000, {true}); //motion 2 of 3
-    autonIntake(3); //intakes and scores ring
-    pros::delay(1000);
-    mogoMech.set_value(false);//releases mogo
-
-    //touches bar
-    chassis.moveToPose(-16.642, -12.844, 225, 4000, {false}); //motion 3 of 3
-}
-
-void autonPath1Origional()
-{
     // sets position / origin (what every other position will now be based on)
-    chassis.setPose(-47.626, -34.678, 245);
+    chassis.setPose(-47.469, -37.219, 235);
 
     //moves to mogo
-    chassis.moveToPose(-29.758, -26.296, 232.9, 4000, {false}); //motion 1 of 3
+    chassis.moveToPose(-29.758, -26.296, 235, 4000, {false}); //motion 1 of 3
 
     mogoMech.set_value(false); //clamps mogo
     autonIntake(2); //scores preload
 
+    chassis.turnToHeading(165, 4000);
+
     //moves to ring
-    chassis.moveToPose(-23.606, -47.094, 345, 4000, {true}); //motion 2 of 3
+    chassis.moveToPose(-23.606, -47.094, 165, 4000, {true}); //motion 2 of 3
     autonIntake(3); //intakes and scores ring
     pros::delay(1000);
     mogoMech.set_value(false);//releases mogo
 
-    //touches bar
-    chassis.moveToPose(-16.642, -12.844, 225, 4000, {false}); //motion 3 of 3
+    chassis.turnToHeading(205, 4000);
 
-    //chassis.turnToHeading(0, 2000);
+
+    //touches bar
+    chassis.moveToPose(-9.868, -18.289, 205, 4000, {false}); //motion 3 of 3
 }
+
+
+void TestMogo()
+{
+    mogoMech.set_value(true); //releases mogo
+    pros::delay(1000);
+    mogoMech.set_value(false); //clamps mogo
+}
+
 
 void autonomous() 
 {
-    autonPath1();
+    TestMogo();
+    //autonPath1();
 }
 
 
@@ -234,9 +228,9 @@ void opcontrol() {
 
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-            mogoMech.set_value(false);//clamps mogo
+            mogoMech.set_value(true);//clamps mogo
         } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-            mogoMech.set_value(true);//releases mogo
+            mogoMech.set_value(false);//releases mogo
         }
 
         //Hang Controlling
