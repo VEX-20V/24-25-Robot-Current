@@ -187,8 +187,12 @@ void TestMogo()
     mogoMech.set_value(true); //releases mogo
     pros::delay(1000);
     mogoMech.set_value(false); //clamps mogo
+    pros::delay(1000);
+    mogoMech.set_value(true); //releases mogo
+
 }
 
+//connent
 
 void autonomous() 
 {
