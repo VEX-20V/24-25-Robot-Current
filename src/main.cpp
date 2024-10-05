@@ -20,6 +20,10 @@ pros::adi::Pneumatics mogoMech('A', true);
 //Hang
 pros::adi::Pneumatics hang('B', false);
 
+//LED CLASS
+pros::adi::Led led1('C', 30);
+
+
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
