@@ -1,70 +1,98 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
+#include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/rtos.hpp"
 //#include "setUp.cpp"
 
+
 pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed. 
+pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed.
+
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-//Intake 
-pros::Motor intake(-15); // reverse the direction 
 
-//Piston mogo mech 
+//Intake
+pros::Motor intake(-15); // reverse the direction
+
+
+//Piston mogo mech
 pros::adi::Pneumatics mogoMech('A', true);
+
+
+//Hang
 pros::adi::Pneumatics hang('B', false);
 
-//LED CLASS
-pros::adi::Led led1('C', 30);
+
+
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
+
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
 pros::Rotation horizontalEnc(17);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(16);
-// horizontal tracking wheel. 
-lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -0.63610);
-// vertical tracking wheel. 
-lemlib::TrackingWheel vertical(&verticalEnc, 2, -.3285);
+// horizontal tracking wheel.
+lemlib::TrackingWheel horizontal(&horizontalEnc, 1.95, -0.944596);
+// vertical tracking wheel.
+lemlib::TrackingWheel vertical(&verticalEnc, 1.95, 0);
+
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               &rightMotors, // right motor group
-                              5.8, // 10 inch track width (from L-->center)
+                              11, // 10 inch track width (from L-->center)
                               lemlib::Omniwheel::NEW_325, // using new 4" omnis
                               360, // drivetrain rpm is 360
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
-// lateral motion controller
-lemlib::ControllerSettings linearController(10, // proportional gain (kP)
-                                            0, // integral gain (kI)
-                                            3, // derivative gain (kD)
-                                            3, // anti windup
-                                            1, // small error range, in inches
-                                            100, // small error range timeout, in milliseconds
-                                            3, // large error range, in inches
-                                            500, // large error range timeout, in milliseconds
-                                            20 // maximum acceleration (slew)
+
+/* Siona's Tuning
+lemlib::ControllerSettings linearController (9, // proportional gain (kP)
+                                              0, // integral gain (kI)
+                                              7, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              3, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              20 // maximum acceleration (slew)
+);
+*/
+
+
+//Luke's Tuning
+lemlib::ControllerSettings linearController(60, // proportional gain (kP)
+                                              0, // integral gain (kI)
+                                              20, // derivative gain (kD)
+                                              2, // anti windup
+                                              .8, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              2, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              20 // maximum acceleration (slew)
 );
 
-// angular motion controller
+
+
+
 lemlib::ControllerSettings angularController(2, // proportional gain (kP)
-                                             0, // integral gain (kI)
-                                             10, // derivative gain (kD)
-                                             3, // anti windup
-                                             1, // small error range, in degrees
-                                             100, // small error range timeout, in milliseconds
-                                             3, // large error range, in degrees
-                                             500, // large error range timeout, in milliseconds
-                                             0 // maximum acceleration (slew)
+                                              -.1, // integral gain (kI)
+                                              12, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in inches
+                                              50, // small error range timeout, in milliseconds
+                                              3, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              0 // maximum acceleration (slew)
 );
+
 
 // sensors for odometry
 lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
@@ -74,11 +102,13 @@ lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
                             &imu // inertial sensor
 );
 
+
 // input curve for throttle input during driver control
 lemlib::ExpoDriveCurve throttleCurve(3, // joystick deadband out of 127
                                      10, // minimum output where drivetrain will move out of 127
                                      1.019 // expo curve gain
 );
+
 
 // input curve for steer input during driver control
 lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
@@ -86,8 +116,10 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
                                   1.019 // expo curve gain
 );
 
+
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
+
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -95,25 +127,21 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void red_lights() {
-    led1.set_all(0xFF0000);
-}
-
-void blue_lights() {
-    led1.set_all(0x0000FF);
-}
-
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
-    
+   
+
+
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
     // lemlib::bufferedStdout().setRate(...);
     // If you use bluetooth or a wired connection, you will want to have a rate of 10ms
 
+
     // for more information on how the formatting for the loggers
     // works, refer to the fmtlib docs
+
 
     // thread to for brain screen and position logging
     pros::Task screenTask([&]() {
@@ -126,14 +154,6 @@ void initialize() {
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
             // delay to save resources
             pros::delay(50);
-            
-
-            //set robot lights to blue on center button
-            pros::lcd::register_btn0_cb(red_lights);
-            pros::lcd::register_btn1_cb(blue_lights);
-
-            // //set robot lights to red on center button
-            
         }
     });
 }
@@ -144,14 +164,14 @@ void initialize() {
  */
 void disabled() {}
 
+
 /**
  * runs after initialize if the robot is connected to field control
  */
 void competition_initialize() {}
 
-// get a path used for pure pursuit
-// this needs to be put outside a function
-ASSET(example_txt); // '.' replaced with "_" to make c++ happy
+
+
 
 /**
  * Runs during auto
@@ -160,6 +180,9 @@ ASSET(example_txt); // '.' replaced with "_" to make c++ happy
  */
 
 
+
+
+//auton helper functions
 void autonIntake(int seconds)
 {
     int miliSeconds = seconds * 1000;
@@ -168,53 +191,99 @@ void autonIntake(int seconds)
     intake.move(0);
 }
 
-// path file name is "LukeTest.txt".
-// "." is replaced with "_" to overcome c++ limitations
-ASSET(BasicPathPt1);
-ASSET(BasicPathPt2);
+
+// get a path used for pure pursuit
+// this needs to be put outside a function
+ASSET(BasicPathPt1_txt);
+ASSET(BasicPathPt2_txt);
 
 
-void autonomous() {
-    // set chassis pose
-    chassis.setPose(0, 0, 0);
-    autonIntake(1);
-    chassis.moveToPose(0, 5, 0, 5000);
-    chassis.moveToPose(0, 0, 0, 5000);//moves back??
-    //OR does THIS move it back?
-    //chassis.setPose(0, -5, 0);
+//auton Path functions
+void autonPath1()
+{
+    mogoMech.set_value(false); //releases mogo
 
 
-    /*
-    mogoMech.set_value(false);//clamps mogo
+    // sets position / origin (what every other position will now be based on)
+    chassis.setPose(-47.469, -37.219, 235);
+
+
+    //moves to mogo
+    chassis.moveToPose(-29.758, -26.296, 235, 4000, {false}); //motion 1 of 3
+
+
+    mogoMech.set_value(true); //clamps mogo
+    autonIntake(2); //scores preload
+
+
+    chassis.turnToHeading(165, 4000);
+
+
+    //moves to ring
+    chassis.moveToPose(-23.606, -47.094, 165, 4000, {true}); //motion 2 of 3
+    autonIntake(3); //intakes and scores ring
     pros::delay(1000);
     mogoMech.set_value(false);//releases mogo
-    */
 
 
-    /*
-    chassis.follow(BasicPathPt1, 15, 2000);
-    chassis.follow(BasicPathPt2, 15, 2000);
-    */
+    chassis.turnToHeading(205, 4000);
 
 
 
 
-
-    
-    //chassis.moveToPose(0, 0, 90, 5000);
-    //chassis.moveToPoint(40.555, 0.517, 5000);
-    
-
-    // create a timer that will wait for 1 second
-    // check if the timer is done
-        
-
-    //chassis.setPose(0, 0, 0);//does this bring it back or make it not move?
-    //basically, is it incremental or absolute coordinates? Hopefully absolute plz. 
-
-    // lookahead distance: 15 inches
-    // timeout: 2000 ms
+    //touches bar
+    chassis.moveToPose(-9.868, -18.289, 205, 4000, {false}); //motion 3 of 3
 }
+
+
+
+
+//testing*************************************************************
+void TestMogo()
+{
+    mogoMech.set_value(false); //releases mogo
+    pros::delay(1000);
+    mogoMech.set_value(true); //clamp mogo
+
+
+}
+
+
+void TurnTest()
+{
+    chassis.setPose(0, 0, 0);
+    chassis.turnToHeading(90, 4000);
+
+
+}
+
+
+void StraitTest()
+{
+    pros::lcd::print(5, "before travelling");
+    chassis.setPose(0, 0, 0);
+    chassis.moveToPose(0, -24, 0, 4000, {false});
+    pros::lcd::print(6, "traveled 24 inches");
+    pros::delay(1000);
+    mogoMech.set_value(true); //clamps mogo
+    chassis.moveToPose(0, 0, 0, 1000);
+
+
+}//testing*************************************************************
+
+
+
+
+void autonomous()
+{
+    mogoMech.set_value(false); // mogo released
+    StraitTest();
+    //TurnTest();
+    //autonPath1();
+}
+
+
+
 
 
 
@@ -227,35 +296,51 @@ void opcontrol() {
     // loop to continuously update motors
     while (true) {
 
+
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
+
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
-   
+
+
+
 
         //intake controlling
         int speed = 127;
         if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_R1)) {
         intake.move(speed);
-    
         } else if (master.get_digital(pros :: E_CONTROLLER_DIGITAL_R2)) {
         intake.move(-speed);
         } else {
         intake.move(0);
         }
 
+
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-            mogoMech.set_value(false);//clamps mogo
+            mogoMech.set_value(true);//clamps mogo
         } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-            mogoMech.set_value(true);//releases mogo
+            mogoMech.set_value(false);//releases mogo
         }
+
+
+        //Hang Controlling
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+            hang.set_value(false);//clamps hang ???
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            hang.set_value(true);//releases hang ???
+        }
+
+
+
 
         // delay to save resources
         pros::delay(10);
     }
 }
 
-//organization goals are on "Code Day 4: Creating CodeV2" of notebook. 
+
+//organization goals are on "Code Day 4: Creating CodeV2" of notebook.
