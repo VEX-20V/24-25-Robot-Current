@@ -19,13 +19,15 @@ pros::Motor intake(-15); // reverse the direction
 
 
 //Piston mogo mech
-pros::adi::Pneumatics mogoMech('A', true);
+pros::adi::Pneumatics mogoMech('A', false);
 
 
 //Hang
 pros::adi::Pneumatics hang('B', false);
 
 
+//LED CLASS
+pros::adi::Led led1('C', 30);
 
 
 // Inertial Sensor on port 10
@@ -121,6 +123,15 @@ lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
 
 
+void red_lights() {
+    led1.set_all(0xFF0000);
+}
+
+
+void blue_lights() {
+    led1.set_all(0x0000FF);
+}
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -130,7 +141,6 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
-   
 
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -154,6 +164,11 @@ void initialize() {
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
             // delay to save resources
             pros::delay(50);
+
+            //set robot lights to blue on center button
+            pros::lcd::register_btn0_cb(red_lights);
+            pros::lcd::register_btn1_cb(blue_lights);
+
         }
     });
 }
@@ -258,7 +273,7 @@ void TurnTest()
 }
 
 
-void StraitTest()
+void StraitMOGOTest()
 {
     pros::lcd::print(5, "before travelling");
     chassis.setPose(0, 0, 0);
@@ -271,15 +286,98 @@ void StraitTest()
 
 }//testing*************************************************************
 
+void AutonSkills()
+{
+    chassis.setPose(-65.405, -35.079, 235);
+    chassis.moveToPose(-48.873, -24.2, 235, 3000, {false});
+    pros::delay(1000);
+    mogoMech.set_value(true); //clamps mogo
+    chassis.turnToHeading(25, 3000);
+    chassis.moveToPose(-48.873, -24, 25, 5000);
 
+}
+
+void TouchBarAuton()
+{
+    chassis.setPose(-48.052, -32.128, 235);
+
+    //moves to mogo
+    chassis.moveToPose(-15.541, -2.843, 235, 8000, {false});
+}
+
+void BLUE_LeaveStart()
+{
+    
+    chassis.setPose(63.493, -50, 270);
+
+    //moves off start facing forward
+    chassis.moveToPose(41.02, -50, 270, 8000, {true});
+
+}
+
+void RED_LeaveStart()
+{
+    
+    chassis.setPose(-63.493, 90, 270);
+
+    //moves off start facing forward
+    chassis.moveToPose(-41.02, 90, 270, 8000, {false});
+
+}
+
+
+void RED_RingAndBar()
+{
+    
+    //start backwards
+    chassis.setPose(-47.469, 37.219, 305);
+
+    chassis.moveToPose(-60.07, 45.614, 305, 1000, {true});
+
+
+    chassis.moveToPose(-29.758, 26.296, 305, 6000, {false});
+    pros::delay(2000);
+
+
+    mogoMech.set_value(true); //clamps mogo
+    pros::delay(2500);
+    autonIntake(4); //scores ring- PRELOAD
+
+    chassis.turnToHeading(215, 3000); 
+    mogoMech.set_value(false); //releases mogo
+
+    chassis.turnToHeading(305, 3000);
+
+    chassis.moveToPose(-6.664, 10.901, 305, 5000, {false});
+
+
+}
 
 
 void autonomous()
 {
-    mogoMech.set_value(false); // mogo released
-    StraitTest();
+    mogoMech.set_value(false); // start w/ MOGO released
+    hang.set_value(false);//start w/ HANG released
+    //StraitMOGOTest();
+
+    RED_RingAndBar();
+
+    /*
+    //Going forward and strait
+    chassis.setPose(0, 0, 0);
+    chassis.moveToPose(0, 24, 0, 4000, {true});
+    */
+    
+
+    //void BLUE_LeaveStart();
+    /*
+    
+    */
     //TurnTest();
     //autonPath1();
+    //TouchBarAuton();
+    //BLUE_LeaveStart();
+
 }
 
 
@@ -329,9 +427,9 @@ void opcontrol() {
 
         //Hang Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-            hang.set_value(false);//clamps hang ???
+            hang.set_value(false);//releases hang
         } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-            hang.set_value(true);//releases hang ???
+            hang.set_value(true);//clamps hang
         }
 
 
