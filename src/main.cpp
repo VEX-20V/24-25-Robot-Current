@@ -40,9 +40,9 @@ pros::Rotation horizontalEnc(17);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(16);
 // horizontal tracking wheel.
-lemlib::TrackingWheel horizontal(&horizontalEnc, 1.95, -0.944596);
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -0.944596);
 // vertical tracking wheel.
-lemlib::TrackingWheel vertical(&verticalEnc, 1.95, 0);
+lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, 0);
 
 
 // drivetrain settings
@@ -70,15 +70,15 @@ lemlib::ControllerSettings linearController (9, // proportional gain (kP)
 
 
 //Luke's Tuning
-lemlib::ControllerSettings linearController(60, // proportional gain (kP)
+lemlib::ControllerSettings linearController(10, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              20, // derivative gain (kD)
-                                              2, // anti windup
-                                              .8, // small error range, in inches
+                                              3, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in inches
                                               100, // small error range timeout, in milliseconds
-                                              2, // large error range, in inches
+                                              3, // large error range, in inches
                                               500, // large error range timeout, in milliseconds
-                                              20 // maximum acceleration (slew)
+                                              40 // maximum acceleration (slew)
 );
 
 
@@ -356,18 +356,15 @@ void RED_RingAndBar()
 
 void autonomous()
 {
-    mogoMech.set_value(false); // start w/ MOGO released
-    hang.set_value(false);//start w/ HANG released
-    //StraitMOGOTest();
+    // mogoMech.set_value(false); // start w/ MOGO released
+    // hang.set_value(false);//start w/ HANG released
+    // //StraitMOGOTest();
 
-    RED_RingAndBar();
+    // RED_RingAndBar();
 
-    /*
-    //Going forward and strait
+    //Going forward and straight
     chassis.setPose(0, 0, 0);
-    chassis.moveToPose(0, 24, 0, 4000, {true});
-    */
-    
+    chassis.moveToPose(0, 24, 0, 10000, {true});   
 
     //void BLUE_LeaveStart();
     /*
