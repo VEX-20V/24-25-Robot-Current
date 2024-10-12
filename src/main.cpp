@@ -42,7 +42,7 @@ pros::Rotation verticalEnc(16);
 // horizontal tracking wheel.
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -0.944596);
 // vertical tracking wheel.
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, 0);
+lemlib::TrackingWheel vertical(&verticalEnc, 1.98, 0);
 
 
 // drivetrain settings
@@ -74,11 +74,11 @@ lemlib::ControllerSettings linearController(10, // proportional gain (kP)
                                               0, // integral gain (kI)
                                               3, // derivative gain (kD)
                                               3, // anti windup
-                                              1, // small error range, in inches
+                                              0.25, // small error range, in inches
                                               100, // small error range timeout, in milliseconds
                                               3, // large error range, in inches
                                               500, // large error range timeout, in milliseconds
-                                              40 // maximum acceleration (slew)
+                                              32 // maximum acceleration (slew)
 );
 
 
