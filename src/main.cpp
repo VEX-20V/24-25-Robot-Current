@@ -54,21 +54,6 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
-
-/* Siona's Tuning
-lemlib::ControllerSettings linearController (9, // proportional gain (kP)
-                                              0, // integral gain (kI)
-                                              7, // derivative gain (kD)
-                                              3, // anti windup
-                                              1, // small error range, in inches
-                                              100, // small error range timeout, in milliseconds
-                                              3, // large error range, in inches
-                                              500, // large error range timeout, in milliseconds
-                                              20 // maximum acceleration (slew)
-);
-*/
-
-
 //Luke's Tuning
 lemlib::ControllerSettings linearController(10, // proportional gain (kP)
                                               0, // integral gain (kI)
