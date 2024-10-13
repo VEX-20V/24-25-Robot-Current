@@ -1,6 +1,7 @@
 // #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "motion.hpp"
 #include "lemlib/chassis/chassis.hpp"
+#include "pros/motors.hpp"
 // #include "pros/llemu.hpp"
 // #include "setUp.cpp"
 
@@ -14,13 +15,13 @@ void TurnTest(lemlib::Chassis& chassis)
 }
 
 
-// void autonIntake(int seconds)
-// {
-//     int miliSeconds = seconds * 1000;
-//     intake.move(127);
-//     pros::delay(miliSeconds);
-//     intake.move(0);
-// }
+void autonIntake(pros::Motor intake, int seconds)
+{
+    int miliSeconds = seconds * 1000;
+    intake.move(127);
+    pros::delay(miliSeconds);
+    intake.move(0);
+}
 
 
 // // get a path used for pure pursuit

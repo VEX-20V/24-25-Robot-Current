@@ -195,16 +195,44 @@ void competition_initialize() {}
 
 
 
+void RED_RingAndBar()
+{
+    
+    //start backwards
+    theChassis.setPose(-47.469, 37.219, 305);
+
+    theChassis.moveToPose(-60.07, 45.614, 305, 1000, {true});
+
+
+    theChassis.moveToPose(-29.758, 26.296, 305, 6000, {false});
+    pros::delay(2000);
+
+
+    mogoMech.set_value(true); //clamps mogo
+    pros::delay(2500);
+    autonIntake(intake, 4); //scores ring- PRELOAD
+
+    theChassis.turnToHeading(215, 3000); 
+    mogoMech.set_value(false); //releases mogo
+
+    theChassis.turnToHeading(305, 3000);
+
+    theChassis.moveToPose(-6.664, 10.901, 305, 5000, {false});
+
+
+}
+
+
 void autonomous()
 {
-    TurnTest(theChassis);
     
-    // mogoMech.set_value(false); // start w/ MOGO released
-    // hang.set_value(false);//start w/ HANG released
+    mogoMech.set_value(false); // start w/ MOGO released
+    hang.set_value(false);//start w/ HANG released
+    RED_RingAndBar();
 
 
+    //TurnTest(theChassis);
     // //StraitMOGOTest();
-    // RED_RingAndBar();
     //void BLUE_LeaveStart();
     //TurnTest();
     //autonPath1();

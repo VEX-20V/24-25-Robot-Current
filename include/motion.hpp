@@ -3,10 +3,8 @@
 
 #include "lemlib/chassis/chassis.hpp"
 
-// #include "lemlib/api.hpp" // IWYU pragma: keep
-
 void TurnTest(lemlib::Chassis& chassis);
-// void autonIntake(int seconds);
+void autonIntake(pros::Motor intake, int seconds);
 // void autonPath1();
 // void TestMogo();
 // void StraitMOGOTest();
