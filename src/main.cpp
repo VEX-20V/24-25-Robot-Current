@@ -143,9 +143,9 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            pros::lcd::print(0, "X: %f", theChassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", theChassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", theChassis.getPose().theta); // heading
+            // pros::lcd::print(0, "X: %f", theChassis.getPose().x); // x
+            // pros::lcd::print(1, "Y: %f", theChassis.getPose().y); // y
+            // pros::lcd::print(2, "Theta: %f", theChassis.getPose().theta); // heading
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", theChassis.getPose());
             // delay to save resources
