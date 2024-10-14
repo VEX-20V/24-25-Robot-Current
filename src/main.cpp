@@ -143,9 +143,9 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            // pros::lcd::print(0, "X: %f", theChassis.getPose().x); // x
-            // pros::lcd::print(1, "Y: %f", theChassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", theChassis.getPose().theta); // heading
+            pros::lcd::print(0, "X: %f", theChassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", theChassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", theChassis.getPose().theta); // heading
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", theChassis.getPose());
             // delay to save resources
@@ -182,42 +182,12 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-
-
-void RED_RingAndBar()
-{
-    
-    //start backwards
-    theChassis.setPose(-47.469, 37.219, 305);
-
-    theChassis.moveToPose(-60.07, 45.614, 305, 1000, {true});
-
-
-    theChassis.moveToPose(-29.758, 26.296, 305, 6000, {false});
-    pros::delay(2000);
-
-
-    mogoMech.set_value(true); //clamps mogo
-    pros::delay(2500);
-    autonIntake(intake, 4); //scores ring- PRELOAD
-
-    theChassis.turnToHeading(215, 3000); 
-    mogoMech.set_value(false); //releases mogo
-
-    theChassis.turnToHeading(305, 3000);
-
-    theChassis.moveToPose(-6.664, 10.901, 305, 5000, {false});
-
-
-}
-
-
 void autonomous()
 {
     
     mogoMech.set_value(false); // start w/ MOGO released
     hang.set_value(false);//start w/ HANG released
-    RED_RingAndBar();
+    RED_Neg_RingAndBar(theChassis, mogoMech, intake);
 
 
     //TurnTest(theChassis);

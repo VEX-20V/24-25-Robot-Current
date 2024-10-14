@@ -14,7 +14,6 @@ void TurnTest(lemlib::Chassis& chassis)
     chassis.turnToHeading(90, 4000);
 }
 
-
 void autonIntake(pros::Motor intake, int seconds)
 {
     int miliSeconds = seconds * 1000;
@@ -22,6 +21,54 @@ void autonIntake(pros::Motor intake, int seconds)
     pros::delay(miliSeconds);
     intake.move(0);
 }
+
+//*****************************************Ring and Bar Queue Autons*******************************************************************************
+//Red Team, + Corner
+void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+{
+    
+    //start backwards
+    chassis.setPose(-47.469, 37.219, 305);
+
+    chassis.moveToPose(-29.758, 26.296, 305, 6000, {.forwards=false, .maxSpeed = 120, .minSpeed = 80});
+    pros::delay(2000);
+
+
+    mogoMech.set_value(true); //clamps mogo
+    pros::delay(2500);
+    autonIntake(intake, 4); //scores ring- PRELOAD
+
+    chassis.turnToHeading(215, 3000); 
+    mogoMech.set_value(false); //releases mogo
+
+    chassis.turnToHeading(305, 3000);
+
+    chassis.moveToPose(-6.664, 10.901, 305, 5000, {false});
+}
+
+//Red Team, - Corner
+void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+{
+    
+    //start backwards
+    chassis.setPose(-47.469, -37.219, 235);
+
+    chassis.moveToPose(-29.758, -26.296, 235, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 100});
+    pros::delay(2000);
+
+
+    mogoMech.set_value(true); //clamps mogo
+    pros::delay(2500);
+    autonIntake(intake, 4); //scores ring- PRELOAD
+
+    chassis.turnToHeading(325, 3000); 
+    mogoMech.set_value(false); //releases mogo
+
+    chassis.turnToHeading(235, 3000);
+
+    chassis.moveToPose(-6.664, -10.901, 235, 5000, {false});
+}
+
 
 
 // // get a path used for pure pursuit
@@ -131,33 +178,4 @@ void autonIntake(pros::Motor intake, int seconds)
 //     theChassis.moveToPose(-41.02, 90, 270, 8000, {false});
 
 // }
-
-
-// void RED_RingAndBar()
-// {
-    
-//     //start backwards
-//     theChassis.setPose(-47.469, 37.219, 305);
-
-//     theChassis.moveToPose(-60.07, 45.614, 305, 1000, {true});
-
-
-//     theChassis.moveToPose(-29.758, 26.296, 305, 6000, {false});
-//     pros::delay(2000);
-
-
-//     mogoMech.set_value(true); //clamps mogo
-//     pros::delay(2500);
-//     autonIntake(4); //scores ring- PRELOAD
-
-//     theChassis.turnToHeading(215, 3000); 
-//     mogoMech.set_value(false); //releases mogo
-
-//     theChassis.turnToHeading(305, 3000);
-
-//     theChassis.moveToPose(-6.664, 10.901, 305, 5000, {false});
-
-
-// }
-
 
