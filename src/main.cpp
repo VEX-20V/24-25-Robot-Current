@@ -6,8 +6,10 @@
 #include "pros/rtos.hpp"
 #include "motion.hpp"
 #include "setup.hpp"
-#include "setup.cpp"
 
+
+// pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
+// pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed.
 
 
 // controller
