@@ -7,6 +7,6 @@
 #include "liblvgl/llemu.hpp"
 #include "pros/rtos.hpp"
 
-void SetUp();
+// void SetUp();
 
 #endif
