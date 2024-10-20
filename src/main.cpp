@@ -5,10 +5,9 @@
 #include "liblvgl/llemu.hpp"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
+#include "setup.hpp"
+#include "setup.cpp"
 
-
-pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed.
 
 
 // controller
@@ -117,6 +116,17 @@ void blue_lights() {
     led1.set_all(0x0000FF);
 }
 
+//*FOR BUTTONS*
+void on_center_button() {
+  static bool pressed = false;
+  pressed = !pressed;
+  if (pressed) {
+    pros::lcd::set_text(2, "I was pressed!");
+  } else {
+    pros::lcd::clear_line(2);
+  }
+}
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -127,6 +137,7 @@ void blue_lights() {
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     theChassis.calibrate(); // calibrate sensors
+    pros::lcd::register_btn0_cb(on_center_button);//*FOR BUTTONS*
 
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -143,7 +154,7 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            // pros::lcd::print(0, "X: %f", theChassis.getPose().x); // x
+            //pros::lcd::print(0, "X: %f", theChassis.getPose().x); // x
             // pros::lcd::print(1, "Y: %f", theChassis.getPose().y); // y
             // pros::lcd::print(2, "Theta: %f", theChassis.getPose().theta); // heading
             // log position telemetry
@@ -161,23 +172,6 @@ void initialize() {
     });
 }
 
-
-
-void on_center_button() {
-  static bool pressed = false;
-  pressed = !pressed;
-  if (pressed) {
-    pros::lcd::set_text(2, "I was pressed!");
-  } else {
-    pros::lcd::clear_line(2);
-  }
-}
-
-void initialize() {
-  pros::lcd::initialize();
-  pros::lcd::register_btn0_cb(on_center_button);
-}
-
 /**
  * Runs while the robot is disabled
  */
@@ -187,12 +181,7 @@ void disabled() {}
 /**
  * runs after initialize if the robot is connected to field control
  */
-void competition_initialize() 
-{
-    pros::lcd::initialize();
-    pros::lcd::register_btn0_cb(on_center_button);
-
-}
+void competition_initialize() {}
 
 
 
