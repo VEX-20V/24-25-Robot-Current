@@ -162,6 +162,22 @@ void initialize() {
 }
 
 
+
+void on_center_button() {
+  static bool pressed = false;
+  pressed = !pressed;
+  if (pressed) {
+    pros::lcd::set_text(2, "I was pressed!");
+  } else {
+    pros::lcd::clear_line(2);
+  }
+}
+
+void initialize() {
+  pros::lcd::initialize();
+  pros::lcd::register_btn0_cb(on_center_button);
+}
+
 /**
  * Runs while the robot is disabled
  */
@@ -171,7 +187,12 @@ void disabled() {}
 /**
  * runs after initialize if the robot is connected to field control
  */
-void competition_initialize() {}
+void competition_initialize() 
+{
+    pros::lcd::initialize();
+    pros::lcd::register_btn0_cb(on_center_button);
+
+}
 
 
 
