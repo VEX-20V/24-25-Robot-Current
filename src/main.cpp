@@ -139,7 +139,6 @@ void on_center_button() {
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     theChassis.calibrate(); // calibrate sensors
-    pros::lcd::register_btn0_cb(on_center_button);//*FOR BUTTONS*
 
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -165,8 +164,11 @@ void initialize() {
             pros::delay(50);
 
             //set robot lights to blue on center button
-            pros::lcd::register_btn0_cb(red_lights);
-            pros::lcd::register_btn1_cb(blue_lights);
+            // pros::lcd::register_btn0_cb(red_lights);
+            // pros::lcd::register_btn1_cb(blue_lights);
+
+            pros::lcd::register_btn1_cb(on_center_button);//*FOR BUTTONS*
+
 
             // //set robot lights to red on center button
             
