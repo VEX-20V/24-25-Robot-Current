@@ -6,7 +6,10 @@
 #include "pros/rtos.hpp"
 #include "motion.hpp"
 #include "setup.hpp"
+#include <string.h>
 
+std::string selectorMessage;
+int programNum = 0;
 
 pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
 pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed.
@@ -118,16 +121,45 @@ void blue_lights() {
     led1.set_all(0x0000FF);
 }
 
+void lights_off(){
+    led1.set_all(NULL); //turn the lights off
+}
+
 //*FOR BUTTONS*
 void on_center_button() {
   static bool pressed = false;
-  pressed = !pressed;
+  pressed = true;
   if (pressed) {
-    pros::lcd::set_text(2, "I was pressed!");
-  } else {
-    pros::lcd::clear_line(2);
+    programNum++;
+    std::string selectorMessage = "programNum";
+    pros::lcd::set_text(programNum, selectorMessage);
   }
 }
+
+void on_left_button() {
+    static bool pressed = false;
+    pressed = !pressed;
+    if (pressed) {
+        pros::lcd::set_text(0, "Blue Lights");
+        blue_lights();
+  } else {
+    pros::lcd::clear_line(0);
+    lights_off();
+  }
+}
+
+void on_right_button() {
+  static bool pressed = false;
+  pressed = !pressed;
+  if (pressed) {
+    pros::lcd::set_text(0, "Red Lights");
+    red_lights();
+  } else {
+    pros::lcd::clear_line(0);
+    lights_off();
+  }
+}
+
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -167,7 +199,9 @@ void initialize() {
             // pros::lcd::register_btn0_cb(red_lights);
             // pros::lcd::register_btn1_cb(blue_lights);
 
+            pros::lcd::register_btn0_cb(on_left_button);//*FOR BUTTONS*
             pros::lcd::register_btn1_cb(on_center_button);//*FOR BUTTONS*
+            pros::lcd::register_btn2_cb(on_right_button);//*FOR BUTTONS*
 
 
             // //set robot lights to red on center button
