@@ -10,6 +10,8 @@
 
 std::string selectorMessage;
 int programNum = 0;
+std::string matchColor;
+
 
 pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
 pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed.
@@ -125,13 +127,29 @@ void lights_off(){
     led1.set_all(NULL); //turn the lights off
 }
 
+void nameButtonMessage(int programNum)
+{
+    switch (programNum) 
+    {
+        case 1:
+            selectorMessage = "Turn Test";
+            break;
+        case 2:
+            selectorMessage = "RED_Neg_RingAndBar";
+            break;
+        default:
+            selectorMessage = "Turn Test";
+            break;
+    }
+}
+
 //*FOR BUTTONS*
 void on_center_button() {
   static bool pressed = false;
   pressed = true;
   if (pressed) {
     programNum++;
-    std::string selectorMessage = "programNum";
+    nameButtonMessage(programNum);
     pros::lcd::set_text(programNum, selectorMessage);
   }
 }
@@ -142,6 +160,7 @@ void on_left_button() {
     if (pressed) {
         pros::lcd::set_text(0, "Blue Lights");
         blue_lights();
+        matchColor = "blue";
   } else {
     pros::lcd::clear_line(0);
     lights_off();
@@ -154,6 +173,7 @@ void on_right_button() {
   if (pressed) {
     pros::lcd::set_text(0, "Red Lights");
     red_lights();
+    matchColor = "red";
   } else {
     pros::lcd::clear_line(0);
     lights_off();
@@ -198,7 +218,6 @@ void initialize() {
             //set robot lights to blue on center button
             // pros::lcd::register_btn0_cb(red_lights);
             // pros::lcd::register_btn1_cb(blue_lights);
-
             pros::lcd::register_btn0_cb(on_left_button);//*FOR BUTTONS*
             pros::lcd::register_btn1_cb(on_center_button);//*FOR BUTTONS*
             pros::lcd::register_btn2_cb(on_right_button);//*FOR BUTTONS*
@@ -232,10 +251,40 @@ void competition_initialize() {}
 
 void autonomous()
 {
-    
     mogoMech.set_value(false); // start w/ MOGO released
     hang.set_value(false);//start w/ HANG released
-    RED_Neg_RingAndBar(theChassis, mogoMech, intake);
+
+    if (matchColor == "red")
+    {
+        switch (programNum) 
+        {
+            case 1:
+                TurnTest(theChassis);
+                break;
+            case 2:
+                RED_Neg_RingAndBar(theChassis, mogoMech, intake);
+                break;
+            default:
+                TurnTest(theChassis);
+                break;
+        }
+    }
+    else if (matchColor == "blue")
+    {
+        switch (programNum) 
+        {
+            case 1:
+                TurnTest(theChassis);
+                break;
+            case 2:
+                //BLUE_Neg_RingAndBar(theChassis, mogoMech, intake);
+                break;
+            default:
+                TurnTest(theChassis);
+                break;
+        }
+    }
+
 
 
     //TurnTest(theChassis);
