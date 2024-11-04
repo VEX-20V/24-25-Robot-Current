@@ -13,8 +13,8 @@ int programNum = 0;
 std::string matchColor;
 
 
-pros::MotorGroup leftMotors({-1, -2, -3}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({4, 5, 6}, pros::MotorGearset::blue); // right motor group - all reversed.
+pros::MotorGroup leftMotors({-1, -2, 3}, pros::MotorGearset::blue); // left motor group //wORKS
+pros::MotorGroup rightMotors({4, 5, -6}, pros::MotorGearset::blue); // right motor group - all reversed.
 
 
 // controller
@@ -257,9 +257,10 @@ void autonomous()
     mogoMech.set_value(false); // start w/ MOGO released
     // hang.set_value(false);//start w/ HANG released
 
-    if (matchColor == "red")
-    {
-        switch (programNum) 
+    // if (matchColor == "red")
+    // {
+        // switch (programNum) 
+        switch (2) 
         {
             case 1:
                 TurnTest(theChassis);
@@ -274,9 +275,9 @@ void autonomous()
                 TurnTest(theChassis);
                 break;
         }
-    }
-    else if (matchColor == "blue")
-    {
+    // }
+    // else if (matchColor == "blue")
+    // {
         switch (programNum) 
         {
             case 1:
@@ -289,7 +290,7 @@ void autonomous()
                 TurnTest(theChassis);
                 break;
         }
-    }
+    // }
 
 
 
