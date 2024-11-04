@@ -13,8 +13,8 @@ int programNum = 0;
 std::string matchColor;
 
 
-pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed.
+pros::MotorGroup leftMotors({-1, -2, -3}, pros::MotorGearset::blue); // left motor group
+pros::MotorGroup rightMotors({4, 5, 6}, pros::MotorGearset::blue); // right motor group - all reversed.
 
 
 // controller
@@ -22,15 +22,15 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 
 //Intake
-pros::Motor intake(-15); // reverse the direction
+pros::Motor intake(-11); // reverse the direction
 
 
 //Piston mogo mech
-pros::adi::Pneumatics mogoMech('A', false);
+pros::adi::Pneumatics mogoMech('H', false);
 
 
 //Hang
-pros::adi::Pneumatics hang('B', false);
+//pros::adi::Pneumatics hang('B', false);
 
 
 //LED CLASS
@@ -137,8 +137,11 @@ void nameButtonMessage(int programNum)
         case 2:
             selectorMessage = "RED_Neg_RingAndBar";
             break;
+        case 3:
+            selectorMessage = "RED_Pos_RingAndBar";
+            break;
         default:
-            selectorMessage = "Turn Test";
+            selectorMessage = "default";
             break;
     }
 }
@@ -252,7 +255,7 @@ void competition_initialize() {}
 void autonomous()
 {
     mogoMech.set_value(false); // start w/ MOGO released
-    hang.set_value(false);//start w/ HANG released
+    // hang.set_value(false);//start w/ HANG released
 
     if (matchColor == "red")
     {
@@ -263,6 +266,9 @@ void autonomous()
                 break;
             case 2:
                 RED_Neg_RingAndBar(theChassis, mogoMech, intake);
+                break;
+            case 3:
+                RED_Pos_RingAndBar(theChassis, mogoMech, intake);
                 break;
             default:
                 TurnTest(theChassis);
@@ -337,11 +343,11 @@ void opcontrol() {
 
 
         //Hang Controlling
-        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-            hang.set_value(false);//releases hang
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-            hang.set_value(true);//clamps hang
-        }
+        // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+        //     hang.set_value(false);//releases hang
+        // } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+        //     hang.set_value(true);//clamps hang
+        // }
 
         // delay to save resources
         pros::delay(10);
