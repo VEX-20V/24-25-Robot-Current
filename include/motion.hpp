@@ -3,7 +3,7 @@
 
 #include "lemlib/chassis/chassis.hpp"
 
-void TurnTest(lemlib::Chassis& chassis);
+void DriveTest(lemlib::Chassis& chassis);
 void autonIntake(pros::Motor intake, int seconds);
 void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
 void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);

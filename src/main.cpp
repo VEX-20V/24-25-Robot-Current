@@ -132,7 +132,7 @@ void nameButtonMessage(int programNum)
     switch (programNum) 
     {
         case 1:
-            selectorMessage = "Turn Test";
+            selectorMessage = "Drive Test";
             break;
         case 2:
             selectorMessage = "RED_Neg_RingAndBar";
@@ -210,9 +210,10 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            //pros::lcd::print(0, "X: %f", theChassis.getPose().x); // x
-            // pros::lcd::print(1, "Y: %f", theChassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", theChassis.getPose().theta); // heading
+            std::string xPosition = std::to_string(theChassis.getPose().x);
+            std::string yPosition = std::to_string(theChassis.getPose().y);
+            pros::lcd::set_text(1, xPosition);
+            pros::lcd::set_text(2, yPosition);
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", theChassis.getPose());
             // delay to save resources
@@ -260,10 +261,10 @@ void autonomous()
     // if (matchColor == "red")
     // {
         // switch (programNum) 
-        switch (2) 
+        switch (1) 
         {
             case 1:
-                TurnTest(theChassis);
+                DriveTest(theChassis);
                 break;
             case 2:
                 RED_Neg_RingAndBar(theChassis, mogoMech, intake);
@@ -272,24 +273,24 @@ void autonomous()
                 RED_Pos_RingAndBar(theChassis, mogoMech, intake);
                 break;
             default:
-                TurnTest(theChassis);
+                DriveTest(theChassis);
                 break;
         }
     // }
     // else if (matchColor == "blue")
     // {
-        switch (programNum) 
-        {
-            case 1:
-                TurnTest(theChassis);
-                break;
-            case 2:
-                //BLUE_Neg_RingAndBar(theChassis, mogoMech, intake);
-                break;
-            default:
-                TurnTest(theChassis);
-                break;
-        }
+        // switch (programNum) 
+        // {
+        //     case 1:
+        //         DriveTest(theChassis);
+        //         break;
+        //     case 2:
+        //         //BLUE_Neg_RingAndBar(theChassis, mogoMech, intake);
+        //         break;
+        //     default:
+        //         DriveTest(theChassis);
+        //         break;
+        // }
     // }
 
 

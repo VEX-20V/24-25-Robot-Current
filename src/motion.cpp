@@ -8,9 +8,10 @@
 
 //auton helper functions
 
-void TurnTest(lemlib::Chassis& chassis)
+void DriveTest(lemlib::Chassis& chassis)
 {
     chassis.setPose(0, 0, 0);
+    chassis.moveToPoint(0, 24, 10000);
     chassis.turnToHeading(90, 4000);
 }
 
