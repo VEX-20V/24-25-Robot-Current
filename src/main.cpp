@@ -210,8 +210,8 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            std::string xPosition = std::to_string(theChassis.getPose().x);
-            std::string yPosition = std::to_string(theChassis.getPose().y);
+            std::string xPosition = "X: " + std::to_string(theChassis.getPose().x);
+            std::string yPosition = "Y: " + std::to_string(theChassis.getPose().y);
             pros::lcd::set_text(1, xPosition);
             pros::lcd::set_text(2, yPosition);
             // log position telemetry
@@ -225,9 +225,6 @@ void initialize() {
             pros::lcd::register_btn0_cb(on_left_button);//*FOR BUTTONS*
             pros::lcd::register_btn1_cb(on_center_button);//*FOR BUTTONS*
             pros::lcd::register_btn2_cb(on_right_button);//*FOR BUTTONS*
-
-
-            // //set robot lights to red on center button
             
         }
     });
