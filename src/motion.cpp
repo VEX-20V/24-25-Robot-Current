@@ -59,10 +59,12 @@ void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech
 
 
     mogoMech.set_value(true); //clamps mogo
-    pros::delay(2500);
-    autonIntake(intake, 4); //scores ring- PRELOAD
+    pros::delay(2000);
+    autonIntake(intake, 2); //scores ring- PRELOAD
+
 
     chassis.turnToHeading(325, 3000 ); /////??????????
+        pros::delay(1000);
     mogoMech.set_value(false); //releases mogo
 
     chassis.turnToHeading(235, 3000); /////??????????

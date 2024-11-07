@@ -258,7 +258,7 @@ void autonomous()
     // if (matchColor == "red")
     // {
         // switch (programNum) 
-        switch (1) 
+        switch (3) 
         {
             case 1:
                 // intake.move(127);
