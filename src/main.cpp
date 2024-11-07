@@ -14,7 +14,7 @@ std::string matchColor;
 
 
 pros::MotorGroup leftMotors({-1, -2, 3}, pros::MotorGearset::blue); // left motor group //wORKS
-pros::MotorGroup rightMotors({4, 5, -6}, pros::MotorGearset::blue); // right motor group - all reversed.
+pros::MotorGroup rightMotors({4, 5, -7}, pros::MotorGearset::blue); // right motor group - all reversed.
 
 
 // controller
