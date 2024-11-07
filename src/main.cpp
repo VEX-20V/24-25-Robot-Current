@@ -38,26 +38,26 @@ pros::adi::Led led1('C', 30);
 
 
 // Inertial Sensor on port 10
-pros::Imu imu(10);
+pros::Imu imu(19);
 
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
-pros::Rotation horizontalEnc(17);
+pros::Rotation horizontalEnc(9);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
-pros::Rotation verticalEnc(16);
+pros::Rotation verticalEnc(12);
 // horizontal tracking wheel.
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -0.944596);
-// vertical tracking wheel.
-lemlib::TrackingWheel vertical(&verticalEnc, 1.98, 0);
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, 1.4445964567);
+// vertical tracking wheel 1.98??.
+lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, 0);
 
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               &rightMotors, // right motor group
-                              11, // 10 inch track width (from L-->center)
+                              11.75, // 10 inch track width (from L-->center)
                               lemlib::Omniwheel::NEW_325, // using new 4" omnis
-                              360, // drivetrain rpm is 360
+                              450, // drivetrain rpm is 450
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
@@ -261,7 +261,14 @@ void autonomous()
         switch (1) 
         {
             case 1:
-                DriveTest(theChassis);
+                // intake.move(127);
+                // pros::delay(1000);
+                // intake.move(0);                
+                // DriveTest(theChassis);
+                theChassis.setPose(0, 0, 0);
+                // theChassis.turnToHeading(90, 4000);
+                theChassis.moveToPoint(0, 24, 10000);
+
                 break;
             case 2:
                 RED_Neg_RingAndBar(theChassis, mogoMech, intake);
