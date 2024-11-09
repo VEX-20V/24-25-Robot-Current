@@ -28,6 +28,10 @@ pros::Motor intake(-11); // reverse the direction
 //Piston mogo mech
 pros::adi::Pneumatics mogoMech('H', false);
 
+//doinker/clearing mech (no^2)
+pros::adi::Pneumatics square('I', false);
+
+
 
 //Hang
 //pros::adi::Pneumatics hang('B', false);
@@ -253,6 +257,8 @@ void competition_initialize() {}
 void autonomous()
 {
     mogoMech.set_value(false); // start w/ MOGO released
+    square.set_value(false); //start w/ SQUARE released
+
     // hang.set_value(false);//start w/ HANG released
 
     // if (matchColor == "red")
@@ -277,7 +283,7 @@ void autonomous()
                 RED_Pos_RingAndBar(theChassis, mogoMech, intake);
                 break;
             case 4:
-                SKILLS_OneMogo(theChassis, mogoMech, intake);
+                SKILLS_OneMogo(theChassis, mogoMech, square, intake);
 
             default:
                 DriveTest(theChassis);
