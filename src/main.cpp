@@ -258,7 +258,7 @@ void autonomous()
     // if (matchColor == "red")
     // {
         // switch (programNum) 
-        switch (3) 
+        switch (4) 
         {
             case 1:
                 // intake.move(127);
@@ -276,6 +276,9 @@ void autonomous()
             case 3:
                 RED_Pos_RingAndBar(theChassis, mogoMech, intake);
                 break;
+            case 4:
+                SKILLS_OneMogo(theChassis, mogoMech, intake);
+
             default:
                 DriveTest(theChassis);
                 break;
