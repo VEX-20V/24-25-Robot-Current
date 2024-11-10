@@ -33,8 +33,8 @@ void autonIntake(pros::Motor intake, int seconds)
 
 void autonWallStake(pros::Motor wallStake)
 {
-    wallStake.move(127); //127
-    pros::delay(700);
+    wallStake.move(110); //127
+    pros::delay(800);
     wallStake.move(6);
     // wallStake.brake();
     pros::delay(1000);
@@ -123,22 +123,31 @@ void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
 void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::adi::Pneumatics square, pros::Motor intake)
 {
     //start backwards
-    chassis.setPose(-60.904, -31.593, 238);
+    chassis.setPose(-56.049, -27.839, 238);
 
     //go to mogo
     chassis.moveToPose(-44.49, -21.37, 238, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
-    pros::delay(2000);
+    pros::delay(500);
 
 
     mogoMech.set_value(true); //clamps mogo2
-    pros::delay(2000);
     autonIntake(intake, 2); //scores ring- PRELOAD
+
+    pros::delay(2000);
 
 
     chassis.turnToHeading(30, 3000 );
 
+    pros::delay(8000);
+
+
+    chassis.setPose(0, 0, 0);
+    pros::delay(200);
+
+
     //score mogo in corner
-    chassis.moveToPose(-66.079, -66.462, 30, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    chassis.moveToPose(0, -24, 0, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    pros::delay(200);
     mogoMech.set_value(false); //releases mogo
 
 }

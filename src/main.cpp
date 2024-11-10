@@ -256,7 +256,7 @@ void competition_initialize() {}
 void autonomous()
 {
     mogoMech.set_value(false); // start w/ MOGO released
-    square.set_value(false); //start w/ SQUARE released
+    square.set_value(false); //start w/ 4 released
 
     // hang.set_value(false);//start w/ HANG released
 
@@ -278,14 +278,18 @@ void autonomous()
 
             case 2:
                 RED_Pos_RingAndBar(theChassis, mogoMech, intake);
+                ////WORKSZZZZZZZZ!!!!!!!!!!!
                 break;
 
-            case 3: //WORKS
+            case 3: 
                 RED_Neg_RingAndBar(theChassis, mogoMech, intake);
+                //Scores Pre-load, but 2nd ring doesn't pick up and doesn't currently touch bar. 
+
                 break;
             case 4:
                 SKILLS_OneMogo(theChassis, mogoMech, square, intake);
-
+                //does actually score that 1 mogo!!
+                break;
             default:
                 DriveTest(theChassis);
                 break;
