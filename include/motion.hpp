@@ -7,7 +7,8 @@ void DriveTest(lemlib::Chassis& chassis);
 void autonIntake(pros::Motor intake, int seconds);
 void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
 void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
-void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::adi::Pneumatics square, pros::Motor intake);
+//void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::adi::Pneumatics square, pros::Motor intake);
+void autonWallStake(pros::Motor wallStake);
 
 // void autonPath1();
 // void TestMogo();

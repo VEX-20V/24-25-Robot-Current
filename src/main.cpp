@@ -3,6 +3,7 @@
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "liblvgl/llemu.hpp"
+#include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
 #include "setup.hpp"
@@ -12,44 +13,42 @@ std::string selectorMessage;
 int programNum = 0;
 std::string matchColor;
 
-
-pros::MotorGroup leftMotors({-1, -2, 3}, pros::MotorGearset::blue); // left motor group //wORKS
-pros::MotorGroup rightMotors({4, 5, -7}, pros::MotorGearset::blue); // right motor group - all reversed.
-
+pros::MotorGroup leftMotors({-11, -12, 13}, pros::MotorGearset::blue); // left motor group //wORKS
+pros::MotorGroup rightMotors({14, 15, -17}, pros::MotorGearset::blue); // right motor group - all reversed.
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 
 //Intake
-pros::Motor intake(-11); // reverse the direction
+pros::Motor intake(-10); // reverse the direction
+
+//Wall stake mech
+pros::Motor wallStake(9); // reverse the direction
 
 
 //Piston mogo mech
 pros::adi::Pneumatics mogoMech('H', false);
 
 //doinker/clearing mech (no^2)
-pros::adi::Pneumatics square('I', false);
-
-
+pros::adi::Pneumatics square('A', false);
 
 //Hang
 //pros::adi::Pneumatics hang('B', false);
-
 
 //LED CLASS
 pros::adi::Led led1('C', 30);
 
 
 // Inertial Sensor on port 10
-pros::Imu imu(19);
+pros::Imu imu(1);
 
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
-pros::Rotation horizontalEnc(9);
+pros::Rotation horizontalEnc(8);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
-pros::Rotation verticalEnc(12);
+pros::Rotation verticalEnc(7);
 // horizontal tracking wheel.
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, 1.4445964567);
 // vertical tracking wheel 1.98??.
@@ -267,23 +266,25 @@ void autonomous()
         switch (4) 
         {
             case 1:
-                // intake.move(127);
-                // pros::delay(1000);
-                // intake.move(0);                
-                // DriveTest(theChassis);
-                theChassis.setPose(0, 0, 0);
-                // theChassis.turnToHeading(90, 4000);
-                theChassis.moveToPoint(0, 24, 10000);
+                // autonWallStake(wallStake);
+                // break;
 
+                theChassis.setPose(0, 0, 0);
+                theChassis.turnToHeading(90, 3000 ); /////??????????
                 break;
+
+                // theChassis.moveToPoint(0, 12, 10000);
+                // break;
+
             case 2:
-                RED_Neg_RingAndBar(theChassis, mogoMech, intake);
-                break;
-            case 3:
                 RED_Pos_RingAndBar(theChassis, mogoMech, intake);
                 break;
+
+            case 3: //WORKS
+                RED_Neg_RingAndBar(theChassis, mogoMech, intake);
+                break;
             case 4:
-                SKILLS_OneMogo(theChassis, mogoMech, square, intake);
+                // SKILLS_OneMogo(theChassis, mogoMech, square, intake);
 
             default:
                 DriveTest(theChassis);
@@ -348,6 +349,10 @@ void opcontrol() {
         intake.move(0);
         }
 
+        //wall stake controlling
+        if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_A)) {
+        autonWallStake(wallStake);
+        }
 
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
