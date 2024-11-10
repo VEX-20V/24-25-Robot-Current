@@ -365,6 +365,14 @@ void opcontrol() {
             mogoMech.set_value(false);//releases mogo
         }
 
+        //Corner Mech Controlling
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+            square.set_value(true);//clamps mogo
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+            square.set_value(false);//releases mogo
+        }
+
+
 
         //Hang Controlling
         // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
