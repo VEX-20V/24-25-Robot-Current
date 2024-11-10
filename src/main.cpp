@@ -19,22 +19,17 @@ pros::MotorGroup rightMotors({14, 15, -17}, pros::MotorGearset::blue); // right 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-
 //Intake
 pros::Motor intake(-10); // reverse the direction
 
 //Wall stake mech
 pros::Motor wallStake(9); // reverse the direction
 
-
 //Piston mogo mech
 pros::adi::Pneumatics mogoMech('H', false);
 
 //doinker/clearing mech (no^2)
 pros::adi::Pneumatics square('A', false);
-
-//Hang
-//pros::adi::Pneumatics hang('B', false);
 
 //LED CLASS
 pros::adi::Led led1('C', 30);
@@ -332,8 +327,7 @@ void opcontrol() {
     // controller
     pros::Controller master (pros::E_CONTROLLER_MASTER);
     // loop to continuously update motors
-    while (true) {
-
+    while (true) {   
 
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -372,19 +366,7 @@ void opcontrol() {
             square.set_value(false);//releases mogo
         }
 
-
-
-        //Hang Controlling
-        // if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-        //     hang.set_value(false);//releases hang
-        // } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        //     hang.set_value(true);//clamps hang
-        // }
-
         // delay to save resources
         pros::delay(10);
     }
 }
-
-
-//organization goals are on "Code Day 4: Creating CodeV2" of notebook.

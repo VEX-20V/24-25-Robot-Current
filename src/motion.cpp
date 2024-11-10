@@ -64,7 +64,8 @@ void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech
     pros::delay(400);
 
     chassis.setPose(0, 0, 0);
-
+    
+    chassis.moveToPose(0, 1, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40}); //helps orient robot??
     chassis.moveToPose(0, 24, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
     autonIntake(intake, 5); //scores EXTRA ring- PRELOAD
     mogoMech.set_value(false); //releases mogo
@@ -116,6 +117,8 @@ void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
     chassis.moveToPose(6.664, -10.901, 122, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
 
 }
+
+
 
 
 //*******************************************SKILLS AUTONS**************************************************** */
