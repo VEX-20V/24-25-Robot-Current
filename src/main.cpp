@@ -264,12 +264,20 @@ void autonomous()
                 // autonWallStake(wallStake);
                 // break;
 
-                theChassis.setPose(0, 0, 0);
-                theChassis.turnToHeading(90, 3000 ); /////??????????
-                break;
-
-                // theChassis.moveToPoint(0, 12, 10000);
+                // theChassis.setPose(0, 0, 0);
+                // theChassis.turnToHeading(90, 3000 ); /////??????????
                 // break;
+
+
+                //FORWARDS Version
+                // theChassis.setPose(0, 0, 0);
+                // theChassis.moveToPoint(0, 12, 10000, {.forwards=true, .maxSpeed = 127, .minSpeed = 50});
+                // break;
+
+                //BACKWARDS Version
+                theChassis.setPose(0, 0, 0);
+                theChassis.moveToPoint(0, -12, 10000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
+                break;
 
             case 2:
                 RED_Pos_RingAndBar(theChassis, mogoMech, intake);
@@ -279,12 +287,20 @@ void autonomous()
             case 3: 
                 RED_Neg_RingAndBar(theChassis, mogoMech, intake);
                 //Scores Pre-load, but 2nd ring doesn't pick up and doesn't currently touch bar. 
-
                 break;
             case 4:
+                BLUE_Pos_RingAndBar(theChassis, mogoMech, intake);
+                //should in theory work
+                break;
+            case 5:
+                BLUE_Pos_RingAndBar(theChassis, mogoMech, intake);
+                //should in theory work
+                break;
+            case 6:
                 SKILLS_OneMogo(theChassis, mogoMech, square, intake);
                 //does actually score that 1 mogo!!
                 break;
+
             default:
                 DriveTest(theChassis);
                 break;

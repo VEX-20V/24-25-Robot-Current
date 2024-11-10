@@ -118,6 +118,12 @@ void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
 
 }
 
+void BLUE_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+{
+    //will paste after checking red_pos works. 
+}
+
+
 
 
 
