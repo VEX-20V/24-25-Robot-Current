@@ -284,7 +284,7 @@ void autonomous()
                 RED_Neg_RingAndBar(theChassis, mogoMech, intake);
                 break;
             case 4:
-                // SKILLS_OneMogo(theChassis, mogoMech, square, intake);
+                SKILLS_OneMogo(theChassis, mogoMech, square, intake);
 
             default:
                 DriveTest(theChassis);

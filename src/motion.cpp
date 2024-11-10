@@ -120,28 +120,28 @@ void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
 
 //*******************************************SKILLS AUTONS**************************************************** */
 
-// void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
-// {
-//     //start backwards
-//     chassis.setPose(-60.894, -33.339, 235);
+void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::adi::Pneumatics square, pros::Motor intake)
+{
+    //start backwards
+    chassis.setPose(-60.904, -31.593, 238);
 
-//     //go to mogo
-//     chassis.moveToPose(-44.49, -21.37, 235, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 100});
-//     pros::delay(2000);
-
-
-//     mogoMech.set_value(true); //clamps mogo
-//     pros::delay(2000);
-//     autonIntake(intake, 2); //scores ring- PRELOAD
+    //go to mogo
+    chassis.moveToPose(-44.49, -21.37, 238, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    pros::delay(2000);
 
 
-//     chassis.turnToHeading(30, 3000 );
+    mogoMech.set_value(true); //clamps mogo2
+    pros::delay(2000);
+    autonIntake(intake, 2); //scores ring- PRELOAD
 
-//     //score mogo in corner
-//     chassis.moveToPose(-66.079, -66.462, 30, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 100});
-//     mogoMech.set_value(false); //releases mogo
 
-// }
+    chassis.turnToHeading(30, 3000 );
+
+    //score mogo in corner
+    chassis.moveToPose(-66.079, -66.462, 30, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    mogoMech.set_value(false); //releases mogo
+
+}
 
 
 // // get a path used for pure pursuit
