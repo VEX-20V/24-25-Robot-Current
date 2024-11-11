@@ -2,6 +2,7 @@
 #include "motion.hpp"
 #include "lemlib/chassis/chassis.hpp"
 #include "pros/motors.hpp"
+#include "pros/rtos.h"
 // #include "pros/llemu.hpp"
 // #include "setUp.cpp"
 
@@ -33,16 +34,25 @@ void autonIntake(pros::Motor intake, int seconds)
 
 void autonWallStake(pros::Motor wallStake)
 {
-    wallStake.move(110); //127
+    wallStake.move(85); //127
     pros::delay(800);
     wallStake.move(6);
-    // wallStake.brake();
-    pros::delay(1000);
-    wallStake.move(-40);
+    pros::delay(300);
+    wallStake.move(-50);
     pros::delay(200);
     wallStake.move(0);
     // wallStake.move(0);
 }
+
+// void helperWallStake(pros::Motor wallStake)
+// {
+//     wallStake.move(85); //127
+//     pros::delay(800);
+//     wallStake.move(6);
+//     pros::delay(3000);
+//     // wallStake.move(0);
+// }
+
 
 
 //*****************************************Ring and Bar Queue Autons*******************************************************************************
@@ -94,7 +104,14 @@ void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech
     // pros::delay(1000);
     mogoMech.set_value(false); //releases mogo
 
-    chassis.moveToPose(-6.664, -10.901, 238, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    // wallStake.move(85); //127
+    // pros::delay(800);
+    // wallStake.move(6);
+    // pros::delay(3000);
+
+
+    //DONT TOUCH BAR BC IT CROSSES LINEEEEEEEEEEE
+    // chassis.moveToPose(-6.664, -10.901, 238, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
 }
 
 void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
@@ -112,9 +129,10 @@ void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
 
 
     // pros::delay(1000);
-    mogoMech.set_value(false); //releases mogo
+    // mogoMech.set_value(false); //releases mogo
 
-    chassis.moveToPose(6.664, -10.901, 122, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
+    //DONT TOUCH BAR
+    // chassis.moveToPose(6.664, -10.901, 122, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
 
 }
 
@@ -142,22 +160,42 @@ void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pr
     mogoMech.set_value(true); //clamps mogo2
     autonIntake(intake, 2); //scores ring- PRELOAD
 
-    pros::delay(2000);
-
+    pros::delay(200);
 
     chassis.turnToHeading(30, 3000 );
 
-    pros::delay(8000);
-
-
-    chassis.setPose(0, 0, 0);
-    pros::delay(200);
-
+    pros::delay(2000); //delete delay later
 
     //score mogo in corner
-    chassis.moveToPose(0, -24, 0, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    chassis.moveToPose(-74.552, -85.683, 30, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
     pros::delay(200);
     mogoMech.set_value(false); //releases mogo
+
+    chassis.setPose(-66.352, -66.462, 30);
+
+    pros::c::delay(200);
+    chassis.turnToHeading(190, 5000);
+    chassis.moveToPose(-47.223, 19.895, 190, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
+
+
+
+
+
+    // chassis.turnToHeading(0, 3000 );
+
+    // pros::delay(200);
+
+
+    // chassis.setPose(0, 0, 0);
+    // pros::delay(100);
+
+    // chassis.turnToHeading(120, 10000);
+
+
+    // //score mogo in corner
+    // chassis.moveToPose(0, -44, 0, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    // pros::delay(200);
+    // mogoMech.set_value(false); //releases mogo
 
 }
 

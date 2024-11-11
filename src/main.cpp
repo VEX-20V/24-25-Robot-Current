@@ -293,9 +293,9 @@ void autonomous()
                 //should in theory work
                 break;
             case 5:
-                BLUE_Pos_RingAndBar(theChassis, mogoMech, intake);
+                BLUE_Neg_RingAndBar(theChassis, mogoMech, intake);
                 //should in theory work
-                break;
+                break;    
             case 6:
                 SKILLS_OneMogo(theChassis, mogoMech, square, intake);
                 //does actually score that 1 mogo!!
