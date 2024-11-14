@@ -258,7 +258,7 @@ void autonomous()
     // if (matchColor == "red")
     // {
         // switch (programNum) 
-        switch (4) 
+        switch (2) 
         {
             case 1:
                 // autonWallStake(wallStake);

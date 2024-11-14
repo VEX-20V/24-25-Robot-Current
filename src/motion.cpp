@@ -57,36 +57,68 @@ void autonWallStake(pros::Motor wallStake)
 
 //*****************************************Ring and Bar Queue Autons*******************************************************************************
 //Red Team, - Corner
-void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
-        //start backwards
-    chassis.setPose(-54.205, 43.013, 302);
+    //start backwards
+    chassis.setPose(-58.125, -35.5, 270);
 
-    chassis.moveToPose(-27.364, 25.561, 302, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
-    pros::delay(2000);
+    //move strait
+    chassis.moveToPose(-41.0, -35.5, 270, 2000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    pros::delay(200);
 
+    //move to mogo
+    chassis.turnToHeading(238, 2000);
+    pros::delay(600);
+    chassis.moveToPose(-27.364, -25.561, 302, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    pros::delay(200);
 
     mogoMech.set_value(true); //clamps mogo
-    pros::delay(2000);
+    pros::delay(100);
     autonIntake(intake, 2); //scores ring- PRELOAD
 
-    chassis.turnToHeading(25, 2000, {.maxSpeed = 127, .minSpeed = 40});
-    pros::delay(400);
+    // chassis.turnToHeading(25, 2000, {.maxSpeed = 127, .minSpeed = 40});
+    // pros::delay(400);
 
-    chassis.setPose(0, 0, 0);
+    // chassis.setPose(0, 0, 0);
     
-    chassis.moveToPose(0, 1, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40}); //helps orient robot??
-    chassis.moveToPose(0, 24, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
-    autonIntake(intake, 5); //scores EXTRA ring- PRELOAD
-    mogoMech.set_value(false); //releases mogo
+    // chassis.moveToPose(0, 1, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40}); //helps orient robot??
+    // chassis.moveToPose(0, 24, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
+    // autonIntake(intake, 5); //scores EXTRA ring- PRELOAD
+    // mogoMech.set_value(false); //releases mogo
     
-    //touch bar
-    // chassis.turnToHeading(345, 2000);
-    // chassis.moveToPose(-12.899, 8.69, 345, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 100});
-
 }
 
+
+//Red Team, - Corner (old)
+// void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+// {
+//         //start backwards
+//     chassis.setPose(-54.205, 43.013, 302);
+
+//     chassis.moveToPose(-27.364, 25.561, 302, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+//     pros::delay(2000);
+
+
+//     mogoMech.set_value(true); //clamps mogo
+//     pros::delay(2000);
+//     autonIntake(intake, 2); //scores ring- PRELOAD
+
+//     chassis.turnToHeading(25, 2000, {.maxSpeed = 127, .minSpeed = 40});
+//     pros::delay(400);
+
+//     chassis.setPose(0, 0, 0);
+    
+//     chassis.moveToPose(0, 1, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40}); //helps orient robot??
+//     chassis.moveToPose(0, 24, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
+//     autonIntake(intake, 5); //scores EXTRA ring- PRELOAD
+//     mogoMech.set_value(false); //releases mogo
+
+// }
+
+
 //Red Team, + Corner
+//not for today
+/*
 void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
     //start backwards
@@ -113,6 +145,7 @@ void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech
     //DONT TOUCH BAR BC IT CROSSES LINEEEEEEEEEEE
     // chassis.moveToPose(-6.664, -10.901, 238, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
 }
+*/
 
 void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
@@ -140,10 +173,6 @@ void BLUE_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
 {
     //will paste after checking red_pos works. 
 }
-
-
-
-
 
 //*******************************************SKILLS AUTONS**************************************************** */
 
