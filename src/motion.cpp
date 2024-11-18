@@ -34,8 +34,8 @@ void autonIntake(pros::Motor intake, int seconds)
 
 void autonWallStake(pros::Motor wallStake)
 {
-    wallStake.move(85); //127
-    pros::delay(800);
+    wallStake.move(115); //127
+    pros::delay(1000);
     wallStake.move(6);
     pros::delay(300);
     wallStake.move(-50);
@@ -57,6 +57,7 @@ void autonWallStake(pros::Motor wallStake)
 
 //*****************************************Ring and Bar Queue Autons*******************************************************************************
 //Red Team, - Corner
+/*
 void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
     //start backwards
@@ -87,38 +88,37 @@ void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech
     // mogoMech.set_value(false); //releases mogo
     
 }
-
+*/
 
 //Red Team, - Corner (old)
-// void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
-// {
-//         //start backwards
-//     chassis.setPose(-54.205, 43.013, 302);
+void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+{
+        //start backwards
+    chassis.setPose(-54.205, 43.013, 302);
 
-//     chassis.moveToPose(-27.364, 25.561, 302, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
-//     pros::delay(2000);
+    chassis.moveToPose(-27.364, 25.561, 302, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
+    pros::delay(2000);
 
 
-//     mogoMech.set_value(true); //clamps mogo
-//     pros::delay(2000);
-//     autonIntake(intake, 2); //scores ring- PRELOAD
+    mogoMech.set_value(true); //clamps mogo
+    pros::delay(2000);
+    autonIntake(intake, 2); //scores ring- PRELOAD
 
-//     chassis.turnToHeading(25, 2000, {.maxSpeed = 127, .minSpeed = 40});
-//     pros::delay(400);
+    chassis.turnToHeading(25, 2000, {.maxSpeed = 127, .minSpeed = 40});
+    pros::delay(400);
 
-//     chassis.setPose(0, 0, 0);
+    chassis.setPose(0, 0, 0);
     
-//     chassis.moveToPose(0, 1, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40}); //helps orient robot??
-//     chassis.moveToPose(0, 24, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
-//     autonIntake(intake, 5); //scores EXTRA ring- PRELOAD
-//     mogoMech.set_value(false); //releases mogo
+    chassis.moveToPose(0, 1, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40}); //helps orient robot??
+    chassis.moveToPose(0, 24, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
+    autonIntake(intake, 5); //scores EXTRA ring- PRELOAD
+    mogoMech.set_value(false); //releases mogo
 
-// }
+}
 
 
 //Red Team, + Corner
-//not for today
-/*
+//FOR COMP #3-Granada!!!
 void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
     //start backwards
@@ -132,20 +132,13 @@ void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech
     pros::delay(2000);
     autonIntake(intake, 2); //scores ring- PRELOAD
 
-
     // pros::delay(1000);
-    mogoMech.set_value(false); //releases mogo
-
-    // wallStake.move(85); //127
-    // pros::delay(800);
-    // wallStake.move(6);
-    // pros::delay(3000);
-
+    // mogoMech.set_value(false); //releases mogo
 
     //DONT TOUCH BAR BC IT CROSSES LINEEEEEEEEEEE
     // chassis.moveToPose(-6.664, -10.901, 238, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
 }
-*/
+
 
 void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
@@ -176,12 +169,13 @@ void BLUE_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
 
 //*******************************************SKILLS AUTONS**************************************************** */
 
+//YES 8pt AUTO WORKED!!!!!!!!!!!
 void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::adi::Pneumatics square, pros::Motor intake)
 {
     //start backwards
     chassis.setPose(-56.049, -27.839, 238);
 
-    //go to mogo
+    //go to mogo0
     chassis.moveToPose(-44.49, -21.37, 238, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
     pros::delay(500);
 
@@ -193,21 +187,18 @@ void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pr
 
     chassis.turnToHeading(30, 3000 );
 
-    pros::delay(2000); //delete delay later
+    pros::delay(500); //delete delay later
 
     //score mogo in corner
-    chassis.moveToPose(-74.552, -85.683, 30, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
+    chassis.moveToPose(-84.552, -95.683, 30, 10000, {.forwards=false, .maxSpeed = 127, .minSpeed = 100});
     pros::delay(200);
     mogoMech.set_value(false); //releases mogo
 
-    chassis.setPose(-66.352, -66.462, 30);
+    // chassis.setPose(-66.352, -66.462, 30);
 
-    pros::c::delay(200);
-    chassis.turnToHeading(190, 5000);
-    chassis.moveToPose(-47.223, 19.895, 190, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
-
-
-
+    // pros::c::delay(200);
+    // chassis.turnToHeading(190, 5000);
+    // chassis.moveToPose(-47.223, 19.895, 190, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
 
 
     // chassis.turnToHeading(0, 3000 );
