@@ -258,7 +258,7 @@ void autonomous()
     // if (matchColor == "red")
     // {
         // switch (programNum) 
-        switch (2) 
+        switch (4) 
         {
             case 1:
                 // autonWallStake(wallStake);
@@ -277,10 +277,13 @@ void autonomous()
                 //BACKWARDS Version
                 theChassis.setPose(0, 0, 0);
                 theChassis.moveToPoint(0, -12, 10000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
+                theChassis.moveToPoint(0, 0, 10000, {.forwards=true, .maxSpeed = 127, .minSpeed = 50});
                 break;
 
             case 2:
                 RED_Pos_RingAndBar(theChassis, mogoMech, intake);
+                //works in ALL corners
+                //^^ since it just joes strait + scores preload 
                 ////WORKSZZZZZZZZ!!!!!!!!!!!
                 break;
 

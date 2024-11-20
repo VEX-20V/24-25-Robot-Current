@@ -56,39 +56,7 @@ void autonWallStake(pros::Motor wallStake)
 
 
 //*****************************************Ring and Bar Queue Autons*******************************************************************************
-//Red Team, - Corner
-/*
-void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
-{
-    //start backwards
-    chassis.setPose(-58.125, -35.5, 270);
 
-    //move strait
-    chassis.moveToPose(-41.0, -35.5, 270, 2000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
-    pros::delay(200);
-
-    //move to mogo
-    chassis.turnToHeading(238, 2000);
-    pros::delay(600);
-    chassis.moveToPose(-27.364, -25.561, 302, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
-    pros::delay(200);
-
-    mogoMech.set_value(true); //clamps mogo
-    pros::delay(100);
-    autonIntake(intake, 2); //scores ring- PRELOAD
-
-    // chassis.turnToHeading(25, 2000, {.maxSpeed = 127, .minSpeed = 40});
-    // pros::delay(400);
-
-    // chassis.setPose(0, 0, 0);
-    
-    // chassis.moveToPose(0, 1, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40}); //helps orient robot??
-    // chassis.moveToPose(0, 24, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
-    // autonIntake(intake, 5); //scores EXTRA ring- PRELOAD
-    // mogoMech.set_value(false); //releases mogo
-    
-}
-*/
 
 //Red Team, - Corner (old)
 void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
@@ -139,13 +107,13 @@ void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech
     // chassis.moveToPose(-6.664, -10.901, 238, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
 }
 
-
+//misleading. Should be 2rings but oh wulp. 
 void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
     //start backwards
-    chassis.setPose(54.205, -43.013, 122);
-    
-    chassis.moveToPose(27.364, -25.561, 122, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
+    chassis.setPose(-54.205, -43.013, 238);
+
+    chassis.moveToPose(-27.364, -25.561, 238, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
     pros::delay(2000);
 
 
@@ -153,13 +121,16 @@ void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
     pros::delay(2000);
     autonIntake(intake, 2); //scores ring- PRELOAD
 
+    chassis.turnToHeading(170, 3000 );
+    pros::delay(2000);
+    chassis.moveToPoint(-21.534, -54.984, 4000,{.forwards=true, .maxSpeed = 127, .minSpeed = 50});
+    autonIntake(intake, 4); //scores 2nd ring
 
-    // pros::delay(1000);
-    // mogoMech.set_value(false); //releases mogo
+    //touch bar
+    chassis.turnToHeading(185, 3000 );
+    chassis.moveToPose(-15.249, 0, 185, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
 
-    //DONT TOUCH BAR
-    // chassis.moveToPose(6.664, -10.901, 122, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
-
+    // chassis.moveToPose(-23.174, -46.239, 170, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
 }
 
 void BLUE_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
