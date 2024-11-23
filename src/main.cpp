@@ -325,7 +325,7 @@ void autonomous()
 
 
 void wall_stake_intake() {
-    while (color_sensor.get_proximity() < 200) {
+    while (color_sensor.get_proximity() < 30) {
         intake.move(speed);
     }
 }
