@@ -4,59 +4,62 @@
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "liblvgl/llemu.hpp"
 #include "pros/misc.h"
+#include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
 #include "setup.hpp"
 
 //optical sensor 
 pros::Optical color_sensor(2);
+#include <string.h>
 
+std::string selectorMessage;
+int programNum = 0;
+std::string matchColor;
 
-pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
-pros::MotorGroup rightMotors({1, 2, 3}, pros::MotorGearset::blue); // right motor group - all reversed.
-
+pros::MotorGroup leftMotors({-11, -12, 13}, pros::MotorGearset::blue); // left motor group //wORKS
+pros::MotorGroup rightMotors({14, 15, -17}, pros::MotorGearset::blue); // right motor group - all reversed.
 
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-
 //Intake
-pros::Motor intake(-15); // reverse the direction
+pros::Motor intake(-10); // reverse the direction
 int speed = 127;
+//Wall stake mech
+pros::Motor wallStake(9); // reverse the direction
 
 //Piston mogo mech
-pros::adi::Pneumatics mogoMech('A', false);
+pros::adi::Pneumatics mogoMech('H', false);
 
-
-//Hang
-pros::adi::Pneumatics hang('B', false);
-
+//doinker/clearing mech (no^2)
+pros::adi::Pneumatics square('A', false);
 
 //LED CLASS
 pros::adi::Led led1('C', 30);
 
 
 // Inertial Sensor on port 10
-pros::Imu imu(10);
+pros::Imu imu(1);
 
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
-pros::Rotation horizontalEnc(17);
+pros::Rotation horizontalEnc(8);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
-pros::Rotation verticalEnc(16);
+pros::Rotation verticalEnc(7);
 // horizontal tracking wheel.
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -0.944596);
-// vertical tracking wheel.
-lemlib::TrackingWheel vertical(&verticalEnc, 1.98, 0);
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, 1.4445964567);
+// vertical tracking wheel 1.98??.
+lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, 0);
 
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               &rightMotors, // right motor group
-                              11, // 10 inch track width (from L-->center)
+                              11.75, // 10 inch track width (from L-->center)
                               lemlib::Omniwheel::NEW_325, // using new 4" omnis
-                              360, // drivetrain rpm is 360
+                              450, // drivetrain rpm is 450
                               1 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
@@ -122,16 +125,69 @@ void blue_lights() {
     led1.set_all(0x0000FF);
 }
 
+void lights_off(){
+    led1.set_all(NULL); //turn the lights off
+}
+
+void nameButtonMessage(int programNum)
+{
+    switch (programNum) 
+    {
+        case 1:
+            selectorMessage = "Leave Start";
+            break;
+        case 2:
+            selectorMessage = "Nuetral- Scores Preload";
+            break;
+        case 3:
+            selectorMessage = "2 Ring- RED(+) or BLUE(-)";
+            break;
+        case 4:
+            selectorMessage = "2 Ring- RED(-) or BLUE(+)";
+            break;
+        default:
+            selectorMessage = "default";
+            break;
+    }
+}
+
 //*FOR BUTTONS*
 void on_center_button() {
   static bool pressed = false;
-  pressed = !pressed;
+  pressed = true;
   if (pressed) {
-    pros::lcd::set_text(2, "I was pressed!");
-  } else {
-    pros::lcd::clear_line(2);
+    programNum++;
+    nameButtonMessage(programNum);
+    pros::lcd::set_text(programNum, selectorMessage);
   }
 }
+
+void on_left_button() {
+    static bool pressed = false;
+    pressed = !pressed;
+    if (pressed) {
+        pros::lcd::set_text(0, "Blue Lights");
+        blue_lights();
+        matchColor = "blue";
+  } else {
+    pros::lcd::clear_line(0);
+    lights_off();
+  }
+}
+
+void on_right_button() {
+  static bool pressed = false;
+  pressed = !pressed;
+  if (pressed) {
+    pros::lcd::set_text(0, "Red Lights");
+    red_lights();
+    matchColor = "red";
+  } else {
+    pros::lcd::clear_line(0);
+    lights_off();
+  }
+}
+
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -143,7 +199,6 @@ void on_center_button() {
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     theChassis.calibrate(); // calibrate sensors
-    pros::lcd::register_btn0_cb(on_center_button);//*FOR BUTTONS*
 
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -160,19 +215,21 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            //pros::lcd::print(0, "X: %f", theChassis.getPose().x); // x
-            // pros::lcd::print(1, "Y: %f", theChassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", theChassis.getPose().theta); // heading
+            std::string xPosition = "X: " + std::to_string(theChassis.getPose().x);
+            std::string yPosition = "Y: " + std::to_string(theChassis.getPose().y);
+            pros::lcd::set_text(1, xPosition);
+            pros::lcd::set_text(2, yPosition);
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", theChassis.getPose());
             // delay to save resources
             pros::delay(50);
 
             //set robot lights to blue on center button
-            pros::lcd::register_btn0_cb(red_lights);
-            pros::lcd::register_btn1_cb(blue_lights);
-
-            // //set robot lights to red on center button
+            // pros::lcd::register_btn0_cb(red_lights);
+            // pros::lcd::register_btn1_cb(blue_lights);
+            pros::lcd::register_btn0_cb(on_left_button);//*FOR BUTTONS*
+            pros::lcd::register_btn1_cb(on_center_button);//*FOR BUTTONS*
+            pros::lcd::register_btn2_cb(on_right_button);//*FOR BUTTONS*
             
         }
     });
@@ -200,10 +257,61 @@ void competition_initialize() {}
 
 void autonomous()
 {
-    
     mogoMech.set_value(false); // start w/ MOGO released
-    hang.set_value(false);//start w/ HANG released
-    RED_Neg_RingAndBar(theChassis, mogoMech, intake);
+    square.set_value(false); //start w/ 4 released
+
+    // if (matchColor == "red")
+    // {
+        // switch (programNum) 
+        switch (4) 
+        {
+            case 1:
+                //LeaveStartForwards(theChassis);
+                LeaveStartBackwards(theChassis);
+                break;
+
+            case 2:
+                NUE_OneRing(theChassis, mogoMech, intake);
+                //works in ALL corners
+                //^^ since it just goes strait + scores preload 
+                ////WORKSZZZZZZZZ!!!!!!!!!!!
+                break;
+
+            case 3: 
+                RED_Pos_and_BLUE_Neg_2Rings(theChassis, mogoMech, intake);
+                break;
+            case 4:
+                RED_Neg_and_BLUE_Pos_2Rings(theChassis, mogoMech, intake);
+                //should in theory work
+                break;
+            case 5:
+                //xxx
+                break;    
+            case 6:
+                SKILLS_OneMogo(theChassis, mogoMech, square, intake);
+                //does actually score that 1 mogo!!
+                break;
+            default:
+                DriveTest(theChassis);
+                break;
+        }
+    // }
+    // else if (matchColor == "blue")
+    // {
+        // switch (programNum) 
+        // {
+        //     case 1:
+        //         DriveTest(theChassis);
+        //         break;
+        //     case 2:
+        //         //BLUE_Neg_RingAndBar(theChassis, mogoMech, intake);
+        //         break;
+        //     default:
+        //         DriveTest(theChassis);
+        //         break;
+        // }
+    // }
+
 
 
     //TurnTest(theChassis);
@@ -230,8 +338,7 @@ void opcontrol() {
     // controller
     pros::Controller master (pros::E_CONTROLLER_MASTER);
     // loop to continuously update motors
-    while (true) {
-
+    while (true) {   
 
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -251,6 +358,10 @@ void opcontrol() {
         intake.move(0);
         }
 
+        //wall stake controlling
+        if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_A)) {
+        autonWallStake(wallStake);
+        }
 
         //Mogo Mech Controlling
         if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
@@ -259,12 +370,11 @@ void opcontrol() {
             mogoMech.set_value(false);//releases mogo
         }
 
-
-        //Hang Controlling
-        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-            hang.set_value(false);//releases hang
-        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-            hang.set_value(true);//clamps hang
+        //Corner Mech Controlling
+        if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+            square.set_value(true);//clamps mogo
+        } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+            square.set_value(false);//releases mogo
         }
 
         //wall stake ring positioner 
