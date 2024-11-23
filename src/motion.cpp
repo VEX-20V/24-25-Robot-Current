@@ -86,7 +86,7 @@ void NUE_OneRing(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros:
 }
 
 //misleading. Should be 2rings but oh wulp. 
-void RED_Pos_and_BLUE_Neg_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+void RED_Pos_and_BLUE_Neg_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake, pros::Motor wallStake)
 {
     //start backwards
     chassis.setPose(-54.205, -43.013, 238);
@@ -97,16 +97,21 @@ void RED_Pos_and_BLUE_Neg_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics
 
     mogoMech.set_value(true); //clamps mogo
     pros::delay(2000);
-    autonIntake(intake, 2); //scores ring- PRELOAD
+    autonIntake(intake, 1); //scores ring- PRELOAD
 
     chassis.turnToHeading(170, 3000 );
     pros::delay(2000);
     chassis.moveToPoint(-21.534, -54.984, 4000,{.forwards=true, .maxSpeed = 127, .minSpeed = 50});
     autonIntake(intake, 4); //scores 2nd ring
 
+    chassis.turnToHeading(20, 3000 );
+
+    wallStake.move(115); //127
+    pros::delay(1000);
+    wallStake.move(6);
+    
     //touch bar
-    chassis.turnToHeading(185, 3000 );
-    chassis.moveToPose(-15.249, 0, 185, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
+    chassis.moveToPose(-13, -14, 185, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 60});
 
     // chassis.moveToPose(-23.174, -46.239, 170, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
 }
@@ -123,7 +128,7 @@ void RED_Neg_and_BLUE_Pos_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics
 
     mogoMech.set_value(true); //clamps mogo
     pros::delay(1000);
-    autonIntake(intake, 2); //scores ring- PRELOAD
+    autonIntake(intake, 1); //scores ring- PRELOAD
 
     chassis.turnToHeading(185, 3000 );
     // pros::delay(800);
@@ -219,7 +224,4 @@ void SKILLS_TwoMogos(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, p
     chassis.turnToHeading(170, 3000 );
     pros::delay(1000);
     chassis.moveToPose(67.008, -67.166, 170, 10000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
-
-
-
 }

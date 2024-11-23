@@ -270,7 +270,7 @@ void autonomous()
 
         // switch (programNum) 
 
-        switch (programNum) 
+        switch (3) 
         {
             case 1:
                 //LeaveStartForwards(theChassis);
@@ -284,7 +284,7 @@ void autonomous()
                 ////WORKSZZZZZZZZ!!!!!!!!!!!
                 break;
             case 3: 
-                RED_Pos_and_BLUE_Neg_2Rings(theChassis, mogoMech, intake);
+                RED_Pos_and_BLUE_Neg_2Rings(theChassis, mogoMech, intake, wallStake);
                 break;
             case 4:
                 RED_Neg_and_BLUE_Pos_2Rings(theChassis, mogoMech, intake, wallStake);

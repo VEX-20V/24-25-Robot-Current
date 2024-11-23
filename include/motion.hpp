@@ -12,7 +12,7 @@ void LeaveStartBackwards(lemlib::Chassis& chassis);
 void LeaveStartForwards(lemlib::Chassis& chassis);
 
 void NUE_OneRing(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
-void RED_Pos_and_BLUE_Neg_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
+void RED_Pos_and_BLUE_Neg_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake, pros::Motor wallStake);
 void RED_Neg_and_BLUE_Pos_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake, pros::Motor wallStake);
 
 //Finals
