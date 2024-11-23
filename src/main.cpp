@@ -6,7 +6,7 @@
 #include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
-#include "setup.hpp"
+#include "pros/optical.hpp"
 
 //optical sensor 
 pros::Optical color_sensor(2);
@@ -218,7 +218,7 @@ void autonomous()
 
 
 void wall_stake_intake() {
-    while (color_sensor.get_proximity() != "near") {
+    while (color_sensor.get_proximity() < 200) {
         intake.move(speed);
     }
 }
