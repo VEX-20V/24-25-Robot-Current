@@ -7,11 +7,9 @@
 #include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
-#include "setup.hpp"
 
 //optical sensor 
 pros::Optical color_sensor(2);
-#include <string.h>
 
 std::string selectorMessage;
 int programNum = 0;
@@ -126,7 +124,7 @@ void blue_lights() {
 }
 
 void lights_off(){
-    led1.set_all(NULL); //turn the lights off
+    led1.set_all(0); //turn the lights off
 }
 
 void nameButtonMessage(int programNum)
