@@ -141,6 +141,12 @@ void nameButtonMessage(int programNum)
         case 4:
             selectorMessage = "2 Ring- RED(-) or BLUE(+)";
             break;
+        case 5:
+            selectorMessage = "Skills- 1 mogo";
+            break;
+        case 6:
+            selectorMessage = "Skills- 2 mogos";
+            break;
         default:
             selectorMessage = "default";
             break;
@@ -256,10 +262,9 @@ void autonomous()
     mogoMech.set_value(false); // start w/ MOGO released
     square.set_value(false); //start w/ 4 released
 
-    // if (matchColor == "red")
-    // {
         // switch (programNum) 
-        switch (4) 
+
+        switch (6) 
         {
             case 1:
                 //LeaveStartForwards(theChassis);
@@ -272,20 +277,19 @@ void autonomous()
                 //^^ since it just goes strait + scores preload 
                 ////WORKSZZZZZZZZ!!!!!!!!!!!
                 break;
-
             case 3: 
                 RED_Pos_and_BLUE_Neg_2Rings(theChassis, mogoMech, intake);
                 break;
             case 4:
-                RED_Neg_and_BLUE_Pos_2Rings(theChassis, mogoMech, intake);
+                RED_Neg_and_BLUE_Pos_2Rings(theChassis, mogoMech, intake, wallStake);
                 //should in theory work
                 break;
             case 5:
-                //xxx
-                break;    
-            case 6:
                 SKILLS_OneMogo(theChassis, mogoMech, square, intake);
                 //does actually score that 1 mogo!!
+                break;    
+            case 6:
+                SKILLS_TwoMogos(theChassis, mogoMech, square, intake);
                 break;
             default:
                 DriveTest(theChassis);
@@ -294,18 +298,18 @@ void autonomous()
     // }
     // else if (matchColor == "blue")
     // {
-        // switch (programNum) 
-        // {
-        //     case 1:
-        //         DriveTest(theChassis);
-        //         break;
-        //     case 2:
-        //         //BLUE_Neg_RingAndBar(theChassis, mogoMech, intake);
-        //         break;
-        //     default:
-        //         DriveTest(theChassis);
-        //         break;
-        // }
+    //     switch (programNum) 
+    //     {
+    //         case 1:
+    //             DriveTest(theChassis);
+    //             break;
+    //         case 2:
+    //             //BLUE_Neg_RingAndBar(theChassis, mogoMech, intake);
+    //             break;
+    //         default:
+    //             DriveTest(theChassis);
+    //             break;
+    //     }
     // }
 
 
