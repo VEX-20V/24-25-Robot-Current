@@ -6,7 +6,6 @@
 #include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
-#include "setup.hpp"
 #include <string.h>
 
 std::string selectorMessage;
@@ -130,22 +129,22 @@ void nameButtonMessage(int programNum)
     switch (programNum) 
     {
         case 1:
-            selectorMessage = "Leave Start";
+            selectorMessage = "111 Leave Start";
             break;
         case 2:
-            selectorMessage = "Nuetral- Scores Preload";
+            selectorMessage = "222 Nuetral- Scores Preload";
             break;
         case 3:
-            selectorMessage = "2 Ring- RED(+) or BLUE(-)";
+            selectorMessage = "333  2 Ring- RED(+) or BLUE(-)";
             break;
         case 4:
-            selectorMessage = "2 Ring- RED(-) or BLUE(+)";
+            selectorMessage = "444  2 Ring- RED(-) or BLUE(+)";
             break;
         case 5:
-            selectorMessage = "Skills- 1 mogo";
+            selectorMessage = "555  Skills- 1 mogo";
             break;
         case 6:
-            selectorMessage = "Skills- 2 mogos";
+            selectorMessage = "666  Skills- 2 mogos";
             break;
         default:
             selectorMessage = "default";
@@ -159,6 +158,7 @@ void on_center_button() {
   pressed = true;
   if (pressed) {
     programNum++;
+    pros::lcd::clear_line(programNum);
     nameButtonMessage(programNum);
     pros::lcd::set_text(programNum, selectorMessage);
   }
@@ -168,7 +168,7 @@ void on_left_button() {
     static bool pressed = false;
     pressed = !pressed;
     if (pressed) {
-        pros::lcd::set_text(0, "Blue Lights");
+        // pros::lcd::set_text(0, "Blue Lights");
         blue_lights();
         matchColor = "blue";
   } else {
@@ -181,7 +181,7 @@ void on_right_button() {
   static bool pressed = false;
   pressed = !pressed;
   if (pressed) {
-    pros::lcd::set_text(0, "Red Lights");
+    // pros::lcd::set_text(0, "Red Lights");
     red_lights();
     matchColor = "red";
   } else {
@@ -217,10 +217,12 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
+            /*
             std::string xPosition = "X: " + std::to_string(theChassis.getPose().x);
             std::string yPosition = "Y: " + std::to_string(theChassis.getPose().y);
             pros::lcd::set_text(1, xPosition);
             pros::lcd::set_text(2, yPosition);
+            */
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", theChassis.getPose());
             // delay to save resources
@@ -264,7 +266,7 @@ void autonomous()
 
         // switch (programNum) 
 
-        switch (4) 
+        switch (programNum) 
         {
             case 1:
                 //LeaveStartForwards(theChassis);
