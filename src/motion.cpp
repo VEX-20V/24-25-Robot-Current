@@ -85,7 +85,7 @@ void NUE_OneRing(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros:
     autonIntake(intake, 2); //scores ring- PRELOAD
 }
 
-//misleading. Should be 2rings but oh wulp. 
+//No longer misleading! 
 void RED_Pos_and_BLUE_Neg_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake, pros::Motor wallStake)
 {
     //start backwards
