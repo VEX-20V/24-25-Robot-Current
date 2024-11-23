@@ -4,9 +4,13 @@
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "liblvgl/llemu.hpp"
 #include "pros/misc.h"
+#include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
-#include <string.h>
+#include "pros/optical.hpp"
+
+//optical sensor 
+pros:: Optical color_sensor(2);
 
 std::string selectorMessage;
 int programNum = 0;
@@ -20,7 +24,7 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 //Intake
 pros::Motor intake(-10); // reverse the direction
-
+int speed = 127;
 //Wall stake mech
 pros::Motor wallStake(9); // reverse the direction
 
@@ -121,7 +125,7 @@ void blue_lights() {
 }
 
 void lights_off(){
-    led1.set_all(NULL); //turn the lights off
+    led1.set_all(0); //turn the lights off
 }
 
 void nameButtonMessage(int programNum)
@@ -327,6 +331,11 @@ void autonomous()
 }
 
 
+void wall_stake_intake() {
+    while (color_sensor.get_proximity() < 30) {
+        intake.move(speed);
+    }
+}
 
 /**
  * Runs in driver control
@@ -345,7 +354,7 @@ void opcontrol() {
         theChassis.arcade(leftY, rightX);
 
         //intake controlling
-        int speed = 127;
+        
         if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_R1)) {
         intake.move(speed);
     
@@ -374,7 +383,17 @@ void opcontrol() {
             square.set_value(false);//releases mogo
         }
 
+        //wall stake ring positioner 
+        if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_RIGHT)) {
+            wall_stake_intake();
+        }
         // delay to save resources
         pros::delay(10);
     }
+
+
 }
+
+
+
+//organization goals are on "Code Day 4: Creating CodeV2" of notebook.
