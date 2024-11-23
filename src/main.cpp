@@ -3,9 +3,13 @@
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "liblvgl/llemu.hpp"
+#include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
 #include "setup.hpp"
+
+//optical sensor 
+pros::Optical color_sensor(2);
 
 
 pros::MotorGroup leftMotors({-11, -12, -13}, pros::MotorGearset::blue); // left motor group
@@ -18,7 +22,7 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 //Intake
 pros::Motor intake(-15); // reverse the direction
-
+int speed = 127;
 
 //Piston mogo mech
 pros::adi::Pneumatics mogoMech('A', false);
@@ -213,6 +217,11 @@ void autonomous()
 }
 
 
+void wall_stake_intake() {
+    while (color_sensor.get_proximity() != "near") {
+        intake.move(speed);
+    }
+}
 
 /**
  * Runs in driver control
@@ -232,7 +241,7 @@ void opcontrol() {
         theChassis.arcade(leftY, rightX);
 
         //intake controlling
-        int speed = 127;
+        
         if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_R1)) {
         intake.move(speed);
     
@@ -258,10 +267,17 @@ void opcontrol() {
             hang.set_value(true);//clamps hang
         }
 
+        //wall stake ring positioner 
+        if(master.get_digital(pros:: E_CONTROLLER_DIGITAL_RIGHT)) {
+            wall_stake_intake();
+        }
         // delay to save resources
         pros::delay(10);
     }
+
+
 }
+
 
 
 //organization goals are on "Code Day 4: Creating CodeV2" of notebook.
