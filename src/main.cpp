@@ -7,9 +7,10 @@
 #include "pros/misc.h"
 #include "pros/rtos.hpp"
 #include "motion.hpp"
+#include "pros/optical.hpp"
 
 //optical sensor 
-pros::Optical color_sensor(2);
+pros:: Optical color_sensor(2);
 
 std::string selectorMessage;
 int programNum = 0;
