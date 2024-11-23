@@ -264,7 +264,7 @@ void autonomous()
 
         // switch (programNum) 
 
-        switch (6) 
+        switch (4) 
         {
             case 1:
                 //LeaveStartForwards(theChassis);
