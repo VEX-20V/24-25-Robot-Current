@@ -5,19 +5,29 @@
 
 void DriveTest(lemlib::Chassis& chassis);
 void autonIntake(pros::Motor intake, int seconds);
-void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
-void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
-void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
-void BLUE_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
-void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::adi::Pneumatics square, pros::Motor intake);
 void autonWallStake(pros::Motor wallStake);
 
-// void autonPath1();
-// void TestMogo();
-// void StraitMOGOTest();
-// void AutonSkills();
-// void TouchBarAuton();
-// void BLUE_LeaveStart();
-// void RED_LeaveStart();
+//Queue
+void LeaveStartBackwards(lemlib::Chassis& chassis);
+void LeaveStartForwards(lemlib::Chassis& chassis);
+
+void NUE_OneRing(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
+void RED_Pos_and_BLUE_Neg_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
+void RED_Neg_and_BLUE_Pos_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake);
+
+//Finals
+
+
+//Skills
+void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::adi::Pneumatics square, pros::Motor intake);
+
+
+//nuetral One Ring scores the preload and keeps holding onto mogo.
+//RED_Pos_2Rings
+
+
+
+//RED_Neg_and_BLUE_Pos_2Rings
+//RED_Pos_and_BLUE_Neg_2Rings
 
 #endif

@@ -55,39 +55,24 @@ void autonWallStake(pros::Motor wallStake)
 
 
 
-//*****************************************Ring and Bar Queue Autons*******************************************************************************
+//*****************************************Queue Autons*******************************************************************************
 
-
-//Red Team, - Corner (old)
-void RED_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+void LeaveStartBackwards(lemlib::Chassis& chassis)
 {
-        //start backwards
-    chassis.setPose(-54.205, 43.013, 302);
-
-    chassis.moveToPose(-27.364, 25.561, 302, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
-    pros::delay(2000);
-
-
-    mogoMech.set_value(true); //clamps mogo
-    pros::delay(2000);
-    autonIntake(intake, 2); //scores ring- PRELOAD
-
-    chassis.turnToHeading(25, 2000, {.maxSpeed = 127, .minSpeed = 40});
-    pros::delay(400);
-
     chassis.setPose(0, 0, 0);
-    
-    chassis.moveToPose(0, 1, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40}); //helps orient robot??
-    chassis.moveToPose(0, 24, 0, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
-    autonIntake(intake, 5); //scores EXTRA ring- PRELOAD
-    mogoMech.set_value(false); //releases mogo
+    chassis.moveToPoint(0, -12, 10000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
+}
+
+void LeaveStartForwards(lemlib::Chassis& chassis)
+{
+    chassis.setPose(0, 0, 0);
+    chassis.moveToPoint(0, 12, 10000, {.forwards=true, .maxSpeed = 127, .minSpeed = 50});
 
 }
 
-
 //Red Team, + Corner
 //FOR COMP #3-Granada!!!
-void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+void NUE_OneRing(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
     //start backwards
     chassis.setPose(-54.205, -43.013, 238);
@@ -95,20 +80,13 @@ void RED_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech
     chassis.moveToPose(-27.364, -25.561, 238, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
     pros::delay(2000);
 
-
     mogoMech.set_value(true); //clamps mogo
     pros::delay(2000);
     autonIntake(intake, 2); //scores ring- PRELOAD
-
-    // pros::delay(1000);
-    // mogoMech.set_value(false); //releases mogo
-
-    //DONT TOUCH BAR BC IT CROSSES LINEEEEEEEEEEE
-    // chassis.moveToPose(-6.664, -10.901, 238, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
 }
 
 //misleading. Should be 2rings but oh wulp. 
-void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+void RED_Pos_and_BLUE_Neg_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
     //start backwards
     chassis.setPose(-54.205, -43.013, 238);
@@ -133,9 +111,28 @@ void BLUE_Pos_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMec
     // chassis.moveToPose(-23.174, -46.239, 170, 6000, {.forwards=true, .maxSpeed = 127, .minSpeed = 40});
 }
 
-void BLUE_Neg_RingAndBar(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
+
+//now it has been tested. 
+void RED_Neg_and_BLUE_Pos_2Rings(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pros::Motor intake)
 {
-    //will paste after checking red_pos works. 
+    //start backwards
+    chassis.setPose(54.205, -43.013, 122);
+
+    chassis.moveToPose(27.364, -25.561, 122, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 45});
+    pros::delay(2000);
+
+    mogoMech.set_value(true); //clamps mogo
+    pros::delay(1000);
+    autonIntake(intake, 2); //scores ring- PRELOAD
+
+    chassis.turnToHeading(190, 3000 );
+    // pros::delay(800);
+    chassis.moveToPoint(21.534, -54.984, 4000,{.forwards=true, .maxSpeed = 127, .minSpeed = 70});
+    autonIntake(intake, 4); //scores 2nd ring
+
+    //touch bar
+    chassis.turnToHeading(185, 1000 );
+    chassis.moveToPose(15.249, 0, 175, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
 }
 
 //*******************************************SKILLS AUTONS**************************************************** */
@@ -146,10 +143,9 @@ void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pr
     //start backwards
     chassis.setPose(-56.049, -27.839, 238);
 
-    //go to mogo0
+    //go to mogo
     chassis.moveToPose(-44.49, -21.37, 238, 6000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
     pros::delay(500);
-
 
     mogoMech.set_value(true); //clamps mogo2
     autonIntake(intake, 2); //scores ring- PRELOAD
@@ -158,144 +154,10 @@ void SKILLS_OneMogo(lemlib::Chassis& chassis, pros::adi::Pneumatics mogoMech, pr
 
     chassis.turnToHeading(30, 3000 );
 
-    pros::delay(500); //delete delay later
+    pros::delay(500); //delete delay later?
 
     //score mogo in corner
     chassis.moveToPose(-84.552, -95.683, 30, 10000, {.forwards=false, .maxSpeed = 127, .minSpeed = 100});
     pros::delay(200);
     mogoMech.set_value(false); //releases mogo
-
-    // chassis.setPose(-66.352, -66.462, 30);
-
-    // pros::c::delay(200);
-    // chassis.turnToHeading(190, 5000);
-    // chassis.moveToPose(-47.223, 19.895, 190, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 60});
-
-
-    // chassis.turnToHeading(0, 3000 );
-
-    // pros::delay(200);
-
-
-    // chassis.setPose(0, 0, 0);
-    // pros::delay(100);
-
-    // chassis.turnToHeading(120, 10000);
-
-
-    // //score mogo in corner
-    // chassis.moveToPose(0, -44, 0, 5000, {.forwards=false, .maxSpeed = 127, .minSpeed = 40});
-    // pros::delay(200);
-    // mogoMech.set_value(false); //releases mogo
-
 }
-
-
-// // get a path used for pure pursuit
-// // this needs to be put outside a function
-// ASSET(BasicPathPt1_txt);
-// ASSET(BasicPathPt2_txt);
-
-
-// //auton Path functions
-// void autonPath1()
-// {
-//     mogoMech.set_value(false); //releases mogo
-
-
-//     // sets position / origin (what every other position will now be based on)
-//     theChassis.setPose(-47.469, -37.219, 235);
-
-
-//     //moves to mogo
-//     theChassis.moveToPose(-29.758, -26.296, 235, 4000, {false}); //motion 1 of 3
-
-
-//     mogoMech.set_value(true); //clamps mogo
-//     autonIntake(2); //scores preload
-
-
-//     theChassis.turnToHeading(165, 4000);
-
-
-//     //moves to ring
-//     theChassis.moveToPose(-23.606, -47.094, 165, 4000, {true}); //motion 2 of 3
-//     autonIntake(3); //intakes and scores ring
-//     pros::delay(1000);
-//     mogoMech.set_value(false);//releases mogo
-
-
-//     theChassis.turnToHeading(205, 4000);
-
-
-
-
-//     //touches bar
-//     theChassis.moveToPose(-9.868, -18.289, 205, 4000, {false}); //motion 3 of 3
-// }
-
-
-
-
-// //testing*************************************************************
-// void TestMogo()
-// {
-//     mogoMech.set_value(false); //releases mogo
-//     pros::delay(1000);
-//     mogoMech.set_value(true); //clamp mogo
-
-
-// }
-
-// void StraitMOGOTest()
-// {
-//     pros::lcd::print(5, "before travelling");
-//     theChassis.setPose(0, 0, 0);
-//     theChassis.moveToPose(0, -24, 0, 4000, {false});
-//     pros::lcd::print(6, "traveled 24 inches");
-//     pros::delay(1000);
-//     mogoMech.set_value(true); //clamps mogo
-//     theChassis.moveToPose(0, 0, 0, 1000);
-
-
-// }//testing*************************************************************
-
-// void AutonSkills()
-// {
-//     theChassis.setPose(-65.405, -35.079, 235);
-//     theChassis.moveToPose(-48.873, -24.2, 235, 3000, {false});
-//     pros::delay(1000);
-//     mogoMech.set_value(true); //clamps mogo
-//     theChassis.turnToHeading(25, 3000);
-//     theChassis.moveToPose(-48.873, -24, 25, 5000);
-
-// }
-
-// void TouchBarAuton()
-// {
-//     theChassis.setPose(-48.052, -32.128, 235);
-
-//     //moves to mogo
-//     theChassis.moveToPose(-15.541, -2.843, 235, 8000, {false});
-// }
-
-// void BLUE_LeaveStart()
-// {
-    
-//     theChassis.setPose(63.493, -50, 270);
-
-//     //moves off start facing forward
-//     theChassis.moveToPose(41.02, -50, 270, 8000, {true});
-
-// }
-
-// void RED_LeaveStart()
-// {
-    
-//     theChassis.setPose(-63.493, 90, 270);
-
-//     //moves off start facing forward
-//     theChassis.moveToPose(-41.02, 90, 270, 8000, {false});
-
-// }
-

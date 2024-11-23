@@ -130,13 +130,16 @@ void nameButtonMessage(int programNum)
     switch (programNum) 
     {
         case 1:
-            selectorMessage = "Drive Test";
+            selectorMessage = "Leave Start";
             break;
         case 2:
-            selectorMessage = "RED_Neg_RingAndBar";
+            selectorMessage = "Nuetral- Scores Preload";
             break;
         case 3:
-            selectorMessage = "RED_Pos_RingAndBar";
+            selectorMessage = "2 Ring- RED(+) or BLUE(-)";
+            break;
+        case 4:
+            selectorMessage = "2 Ring- RED(-) or BLUE(+)";
             break;
         default:
             selectorMessage = "default";
@@ -253,57 +256,37 @@ void autonomous()
     mogoMech.set_value(false); // start w/ MOGO released
     square.set_value(false); //start w/ 4 released
 
-    // hang.set_value(false);//start w/ HANG released
-
     // if (matchColor == "red")
     // {
         // switch (programNum) 
         switch (4) 
         {
             case 1:
-                // autonWallStake(wallStake);
-                // break;
-
-                // theChassis.setPose(0, 0, 0);
-                // theChassis.turnToHeading(90, 3000 ); /////??????????
-                // break;
-
-
-                //FORWARDS Version
-                // theChassis.setPose(0, 0, 0);
-                // theChassis.moveToPoint(0, 12, 10000, {.forwards=true, .maxSpeed = 127, .minSpeed = 50});
-                // break;
-
-                //BACKWARDS Version
-                theChassis.setPose(0, 0, 0);
-                theChassis.moveToPoint(0, -12, 10000, {.forwards=false, .maxSpeed = 127, .minSpeed = 50});
-                theChassis.moveToPoint(0, 0, 10000, {.forwards=true, .maxSpeed = 127, .minSpeed = 50});
+                //LeaveStartForwards(theChassis);
+                LeaveStartBackwards(theChassis);
                 break;
 
             case 2:
-                RED_Pos_RingAndBar(theChassis, mogoMech, intake);
+                NUE_OneRing(theChassis, mogoMech, intake);
                 //works in ALL corners
-                //^^ since it just joes strait + scores preload 
+                //^^ since it just goes strait + scores preload 
                 ////WORKSZZZZZZZZ!!!!!!!!!!!
                 break;
 
             case 3: 
-                RED_Neg_RingAndBar(theChassis, mogoMech, intake);
-                //Scores Pre-load, but 2nd ring doesn't pick up and doesn't currently touch bar. 
+                RED_Pos_and_BLUE_Neg_2Rings(theChassis, mogoMech, intake);
                 break;
             case 4:
-                BLUE_Pos_RingAndBar(theChassis, mogoMech, intake);
+                RED_Neg_and_BLUE_Pos_2Rings(theChassis, mogoMech, intake);
                 //should in theory work
                 break;
             case 5:
-                BLUE_Neg_RingAndBar(theChassis, mogoMech, intake);
-                //should in theory work
+                //xxx
                 break;    
             case 6:
                 SKILLS_OneMogo(theChassis, mogoMech, square, intake);
                 //does actually score that 1 mogo!!
                 break;
-
             default:
                 DriveTest(theChassis);
                 break;
